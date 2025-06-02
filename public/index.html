@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AutoHub</title>
+  <!-- Підключаємо свій CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Темна шапка -->
+  <header class="header">
+    <div class="header__container">
+      <a href="/" class="header__logo">AutoHub</a>
+      <nav class="header__nav">
+        <a href="/" class="header__link">Головна</a>
+        <a href="/add.html" class="header__link">Додати авто</a>
+        <a href="/contacts.html" class="header__link">Контакти</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Герой-секція з фоновим зображенням -->
+  <section class="hero">
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <h1 class="hero__title">Резервуйте авто онлайн</h1>
+      <p class="hero__subtitle">Отримайте перше ТО безкоштовно</p>
+      <a href="/" class="hero__button">Автомобілі в наявності</a>
+    </div>
+  </section>
+
+  <!-- Горизонтальна панель категорій (Model lineup) -->
+  <section class="categories">
+    <ul class="categories__list">
+      <li class="categories__item"><a href="#" class="categories__link active">Седани</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">SUV</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">Купе</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">Кабріолети та Родстери</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">Хетчбеки</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">Мінівени</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">Універсали</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">Електричні моделі</a></li>
+    </ul>
+  </section>
+
+  <!-- Основна секція: Каталог авто -->
+  <main class="catalog">
+    <div class="catalog__container">
+      <h2 class="catalog__title">Каталог автомобілів</h2>
+      <div id="cars-container" class="cars-container">
+        <p class="no-cars">У базі поки немає автомобілів.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Підключаємо існуючий скрипт для завантаження карток -->
+  <script src="script.js"></script>
+</body>
+</html>
