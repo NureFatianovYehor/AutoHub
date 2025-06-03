@@ -4,126 +4,130 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AutoHub</title>
-  <!-- Підключаємо CSS -->
+  <!-- Підключаємо головний CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<!-- ==================== HEADER ==================== -->
-<header class="header">
-  <div class="header__container">
-    <a href="/" class="header__logo">AutoHub</a>
-    <nav class="header__nav">
-      <a href="/" class="header__link">Головна</a>
-      <a href="/add.html" class="header__link">Додати авто</a>
-      <!-- Замінили посилання на внутрішньо-сторінковий якір -->
-      <a href="#contacts" class="header__link">Контакти</a>
-    </nav>
-  </div>
-</header>
-<!-- ==================== /HEADER ==================== -->
+  <!-- ==================== HEADER ==================== -->
+  <header class="header">
+    <div class="header__container">
+      <!-- Логотип -->
+      <a href="/" class="header__logo" id="logo-text">AutoHub</a>
+      <!-- Блок для імені користувача -->
+      <div class="header__user" id="user-name" style="color: #ffffff; font-size: 1rem;"></div>
+      <nav class="header__nav">
+        <a href="/" class="header__link">Головна</a>
+        <a href="/add.html" class="header__link">Додати авто</a>
+        <a href="#contacts" class="header__link">Контакти</a>
+      </nav>
+    </div>
+  </header>
+  <!-- ==================== /HEADER ==================== -->
 
-    <!-- ================= СЕКЦІЯ З ВІДЕО (HERO) ================= -->
-    <section class="hero" id="top">
-      <video class="hero__video" autoplay muted loop playsinline>
-        <source 
-          src="https://oyvfmxypflflandvrvle.supabase.co/storage/v1/object/public/cars/video.mp4" 
-          type="video/mp4">
-        Ваш браузер не підтримує відео.
-      </video>
-      <div class="hero__overlay"></div>
-      <div class="hero__content">
-        <h1 class="hero__title">Резервуйте авто онлайн</h1>
-        <p class="hero__subtitle">Отримайте перше ТО безкоштовно</p>
-        <a href="/" class="hero__button">Автомобілі в наявності</a>
+  <!-- ================= СЕКЦІЯ З ВІДЕО (HERO) ================= -->
+  <section class="hero" id="top">
+    <video class="hero__video" autoplay muted loop playsinline>
+      <source 
+        src="https://oyvfmxypflflandvrvle.supabase.co/storage/v1/object/public/cars/video.mp4" 
+        type="video/mp4">
+      Ваш браузер не підтримує відео.
+    </video>
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <h1 class="hero__title">Резервуйте авто онлайн</h1>
+      <p class="hero__subtitle">Отримайте перше ТО безкоштовно</p>
+      <a href="/" class="hero__button">Автомобілі в наявності</a>
+    </div>
+  </section>
+  <!-- =============== /HERO ================= -->
+
+  <!-- Горизонтальна панель категорій -->
+  <section class="categories">
+    <ul class="categories__list">
+      <li class="categories__item"><a href="#" class="categories__link active">Седани</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">SUV</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">Купе</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">Кабріолети та Родстери</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">Хетчбеки</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">Мінівени</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">Універсали</a></li>
+      <li class="categories__divider"></li>
+      <li class="categories__item"><a href="#" class="categories__link">Електричні моделі</a></li>
+    </ul>
+  </section>
+
+  <!-- Основна секція: Каталог авто -->
+  <main class="catalog">
+    <div class="catalog__container">
+      <h2 class="catalog__title">Каталог автомобілів</h2>
+      <!-- Саме сюди JS вставлятиме картки -->
+      <div id="cars-container" class="cars-container">
+        <p class="no-cars">У базі поки немає автомобілів.</p>
       </div>
-    </section>
-    <!-- =============== /HERO ================= -->
+    </div>
+  </main>
 
-    <!-- Горизонтальна панель категорій -->
-    <section class="categories">
-      <ul class="categories__list">
-        <li class="categories__item"><a href="#" class="categories__link active">Седани</a></li>
-        <li class="categories__divider"></li>
-        <li class="categories__item"><a href="#" class="categories__link">SUV</a></li>
-        <li class="categories__divider"></li>
-        <li class="categories__item"><a href="#" class="categories__link">Купе</a></li>
-        <li class="categories__divider"></li>
-        <li class="categories__item"><a href="#" class="categories__link">Кабріолети та Родстери</a></li>
-        <li class="categories__divider"></li>
-        <li class="categories__item"><a href="#" class="categories__link">Хетчбеки</a></li>
-        <li class="categories__divider"></li>
-        <li class="categories__item"><a href="#" class="categories__link">Мінівени</a></li>
-        <li class="categories__divider"></li>
-        <li class="categories__item"><a href="#" class="categories__link">Універсали</a></li>
-        <li class="categories__divider"></li>
-        <li class="categories__item"><a href="#" class="categories__link">Електричні моделі</a></li>
-      </ul>
-    </section>
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer" id="contacts">
+    <!-- Блок «Наверх» -->
+    <div class="footer__back-to-top">
+      <a href="#top">Наверх ↑</a>
+    </div>
 
-    <!-- Основна секція: Каталог авто -->
-    <main class="catalog">
-      <div class="catalog__container">
-        <h2 class="catalog__title">Каталог автомобілів</h2>
-        <!-- Саме сюди JS вставлятиме картки -->
-        <div id="cars-container" class="cars-container">
-          <p class="no-cars">У базі поки немає автомобілів.</p>
-        </div>
+    <!-- Верхня частина футера: три колонки -->
+    <div class="footer__columns">
+      <!-- Колонка 1: Покупка -->
+      <div class="footer__column">
+        <h3 class="footer__title">Покупка</h3>
+        <a href="/cars" class="footer__link">Авто в наявності</a>
+        <a href="/configurator" class="footer__link">Конфігуратор</a>
+        <a href="/accessories" class="footer__link">Аксесуари</a>
       </div>
-    </main>
 
-   <!-- ==================== FOOTER ==================== -->
-<footer class="footer" id="contacts">
-  <!-- Блок «Наверх» -->
-  <div class="footer__back-to-top">
-    <a href="#top">Наверх ↑</a>
-  </div>
+      <!-- Колонка 2: Сервіс -->
+      <div class="footer__column">
+        <h3 class="footer__title">Сервіс</h3>
+        <a href="/service" class="footer__link">Техобслуговування</a>
+        <a href="/warranty" class="footer__link">Гарантія</a>
+        <a href="/spare-parts" class="footer__link">Запчастини</a>
+      </div>
 
-  <!-- Верхня частина футера: три колонки -->
-  <div class="footer__columns">
-    <!-- Колонка 1: Покупка -->
-    <div class="footer__column">
-      <h3 class="footer__title">Покупка</h3>
-      <a href="/cars" class="footer__link">Авто в наявності</a>
-      <a href="/configurator" class="footer__link">Конфігуратор</a>
-      <a href="/accessories" class="footer__link">Аксесуари</a>
+      <!-- Колонка 3: Компанія -->
+      <div class="footer__column">
+        <h3 class="footer__title">Компанія</h3>
+        <a href="/about" class="footer__link">Про нас</a>
+        <a href="#contacts" class="footer__link">Контакти</a>
+        <a href="/careers" class="footer__link">Вакансії</a>
+      </div>
     </div>
 
-    <!-- Колонка 2: Сервіс -->
-    <div class="footer__column">
-      <h3 class="footer__title">Сервіс</h3>
-      <a href="/service" class="footer__link">Техобслуговування</a>
-      <a href="/warranty" class="footer__link">Гарантія</a>
-      <a href="/spare-parts" class="footer__link">Запчастини</a>
+    <!-- Нижня частина футера: юридичні посилання + контакти -->
+    <div class="footer__bottom">
+      <div class="footer__bottom-links">
+        <a href="/privacy-policy" class="footer__bottom-link">Політика конфіденційності</a>
+        <a href="/terms" class="footer__bottom-link">Умови використання</a>
+        <a href="/feedback" class="footer__bottom-link">Зворотній зв'язок</a>
+      </div>
+      <div class="footer__contact">
+        <span class="footer__contact-item">📧 autohub74@gmail.com</span>
+        <span class="footer__contact-item">📞 +38 095 860 15 88</span>
+      </div>
     </div>
+  </footer>
+  <!-- ==================== /FOOTER ==================== -->
 
-    <!-- Колонка 3: Компанія -->
-    <div class="footer__column">
-      <h3 class="footer__title">Компанія</h3>
-      <a href="/about" class="footer__link">Про нас</a>
-      <a href="#contacts" class="footer__link">Контакти</a>
-      <a href="/careers" class="footer__link">Вакансії</a>
-    </div>
-  </div>
-
-  <!-- Нижня частина футера: юридичні посилання + контакти -->
-  <div class="footer__bottom">
-    <div class="footer__bottom-links">
-      <a href="/privacy-policy" class="footer__bottom-link">Політика конфіденційності</a>
-      <a href="/terms" class="footer__bottom-link">Умови використання</a>
-      <a href="/feedback" class="footer__bottom-link">Зворотній зв'язок</a>
-    </div>
-
-    <div class="footer__contact">
-      <span class="footer__contact-item">📧 autohub74@gmail.com</span>
-      <span class="footer__contact-item">📞 +38 095 860 15 88</span>
-    </div>
-  </div>
-</footer>
-<!-- ==================== /FOOTER ==================== -->
-
-  </div><!-- /.page-container -->
-
-  <!-- JS-скрипт для завантаження карток -->
+  <!-- ==================== ПІДКЛЮЧЕННЯ JS ==================== -->
+  <!-- 1) Спочатку config.js -->
+  <script src="config.js"></script>
+  <!-- 2) Далі UMD-бандл supabase-js -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
+  <!-- 3) А лише потім – ваш власний script.js -->
   <script src="script.js"></script>
 </body>
 </html>

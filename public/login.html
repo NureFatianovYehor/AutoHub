@@ -1,11 +1,11 @@
+<!-- public/login.html -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AutoHub | Ухід</title>
-
-  <!-- Підключаємо окремий CSS для login-сторінки -->
+  <title>AutoHub | Увійти</title>
+  <!-- Підключаємо CSS для сторінки логіну -->
   <link rel="stylesheet" href="login.css" />
 </head>
 <body>
@@ -27,16 +27,24 @@
     </div>
   </div>
 
-  <!-- Підключаємо config.js і Supabase JS -->
+  <!-- 1) Спочатку підключаємо ваш config.js, де визначено AUTOHUB_CONFIG -->
   <script src="config.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/index.js"></script>
+  <!-- 2) Потім підвантажуємо саме той самий UMD-бандл supabase-js, що й у реєстрації -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
+  <!-- 3) І лише тепер підключаємо наш власний inline-скрипт, який використовує window.supabase -->
   <script>
     (function() {
-      // Забираємо налаштування з config.js
-      const SUPABASE_URL     = window.AUTOHUB_CONFIG.SUPABASE_URL;
-      const SUPABASE_ANON_KEY = window.AUTOHUB_CONFIG.SUPABASE_KEY;
-      // Ініціалізуємо клієнта Supabase
-      const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      // 1) Зчитуємо значення з config.js
+      const SUPABASE_URL      = window.AUTOHUB_CONFIG?.SUPABASE_URL;
+      const SUPABASE_ANON_KEY = window.AUTOHUB_CONFIG?.SUPABASE_KEY;
+
+      if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+        console.error('Помилка: SUPABASE_URL або SUPABASE_ANON_KEY не задані в config.js');
+        return;
+      }
+
+      // 2) Ініціалізуємо клієнт Supabase через глобальний window.supabase
+      const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
       const form       = document.getElementById('login-form');
       const messageDiv = document.getElementById('login-message');
@@ -55,20 +63,19 @@
         }
 
         try {
-          // Спроба увійти через Supabase Auth
-          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+          // 3) Викликаємо signInWithPassword через supabaseClient.auth
+          const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
             email:    email,
             password: password
           });
           if (signInError) throw signInError;
 
-          // Якщо вхід успішний, можна зберегти токен / інформацію
-          // Наприклад, перенаправити на головну сторінку (index.html)
+          // 4) Якщо вхід успішний – показуємо повідомлення і перекидуємо на index.html
           messageDiv.style.color = 'green';
           messageDiv.textContent = 'Вхід успішний! Завантажуємо...';
           setTimeout(() => {
             window.location.href = 'index.html';
-          }, 1000);
+          }, 500);
 
         } catch (error) {
           console.error(error);

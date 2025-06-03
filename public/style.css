@@ -42,6 +42,7 @@ main {
 }
 
 .header__container {
+  position: relative;        /* додаємо відносне позиціонування */
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -56,6 +57,24 @@ main {
   color: #ffffff;
   text-decoration: none;
 }
+
+/* === Ось тут на рівні контейнера ми центрируємо блок з ім’ям === */
+.header__user {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;                /* відстань між іменем і кнопкою */
+  white-space: nowrap;     /* щоб ім’я не переносилося */
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+  z-index: 10;             /* зверху всіх інших елементів шапки */
+}
+
+/* ========================================================== */
 
 .header__nav {
   display: flex;
@@ -73,6 +92,24 @@ main {
 .header__link:hover {
   color: #bfbfbf; /* світло-сірий при наведенні */
 }
+
+/* Стилі для кнопки “Вийти” */
+#logout-button {
+  background: transparent;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+#logout-button:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+
 
 /* ==================== Hero (відео-секція) ==================== */
 .hero {
