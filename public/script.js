@@ -1,25 +1,33 @@
 // === script.js ===
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1) Зчитуємо налаштування Supabase з config.js
+  // 1) Считываем настройки Supabase из config.js
   const SUPABASE_URL      = window.AUTOHUB_CONFIG?.SUPABASE_URL;
   const SUPABASE_ANON_KEY = window.AUTOHUB_CONFIG?.SUPABASE_KEY;
 
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    console.error('Не знайдено AUTOHUB_CONFIG з SUPABASE_URL / SUPABASE_KEY.');
+    console.error('Не найден AUTOHUB_CONFIG с SUPABASE_URL / SUPABASE_KEY.');
     return;
   }
 
-  // 2) Ініціалізуємо клієнт Supabase (з UMD-бандла "supabase.js")
+  // 2) Инициализируем клиента Supabase (UMD-бандл supabase.js должен быть уже подключён)
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // 3) Завантажуємо та рендеримо машини
+  // 3) Загружаем машины в каталог
+  loadCars();
+
+  // 4) Сразу показываем шапку: либо приветствие + кнопка «Выйти», либо «Войти»/«Зарегистрироваться»
+  showUserNameOrAuthButtons();
+
+
+  /* ——————————————————————————————————————————————————————————————————————— */
+  /* ФУНКЦИЯ 1: Загружает и рендерит машины */
   async function loadCars() {
     const container = document.getElementById('cars-container');
     if (!container) return;
 
     try {
-      // Використовуємо клієнтський метод Supabase для читання з таблиці "cars"
+      // Запрос к таблице "cars"
       const { data: cars, error: carsError } = await supabaseClient
         .from('cars')
         .select('*');
@@ -27,39 +35,42 @@ document.addEventListener('DOMContentLoaded', () => {
       if (carsError) throw carsError;
 
       if (!Array.isArray(cars) || cars.length === 0) {
-        container.innerHTML = '<p class="no-cars">У базі поки немає автомобілів.</p>';
+        container.innerHTML = '<p class="no-cars">В базе пока нет автомобилей.</p>';
         return;
       }
 
-      // Очищаємо контейнер і додаємо картки
+      // Очищаем контейнер и добавляем карточки
       container.innerHTML = '';
       cars.forEach(car => {
         const card = createCarCard(car);
         container.appendChild(card);
       });
+
     } catch (err) {
-      console.error('Помилка loadCars():', err);
-      container.innerHTML = `<p class="error">Не вдалося завантажити дані: ${err.message}</p>`;
+      console.error('Ошибка loadCars():', err);
+      container.innerHTML = `<p class="error">Не удалось загрузить данные: ${err.message}</p>`;
     }
   }
 
-  // 4) Створення однієї картки машини
+
+  /* ——————————————————————————————————————————————————————————————————————— */
+  /* ФУНКЦИЯ 2: Создаёт одну карточку машины */
   function createCarCard(car) {
     const card = document.createElement('div');
     card.className = 'car-card';
 
-    // Зображення
+    // Изображение
     const img = document.createElement('img');
     img.className = 'car-card__image';
     img.src = getImageSrc(car.images);
-    img.alt = `${car.brand || ''} ${car.model || ''}`.trim() || 'Немає фото';
+    img.alt = `${car.brand || ''} ${car.model || ''}`.trim() || 'Нет фото';
     card.appendChild(img);
 
-    // Контент картки
+    // Контент карточки
     const content = document.createElement('div');
     content.className = 'car-card__content';
 
-    // Інформація про бренд/модель/рік
+    // Информация о бренде/модели/году
     const info = document.createElement('div');
     info.className = 'car-card__info';
     const brandModel = document.createElement('div');
@@ -67,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     brandModel.textContent = `${car.brand || '-'} ${car.model || '-'} (${car.year || '-'})`;
     info.appendChild(brandModel);
 
+    // Короткий заголовок (title)
     const title = document.createElement('div');
     title.className = 'car-card__title';
     title.textContent = car.title || '';
@@ -74,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     content.appendChild(info);
 
-    // Блок із ціною та кнопкою "Детальніше"
+    // Блок с ценой и кнопкой "Подробнее"
     const footer = document.createElement('div');
     footer.className = 'car-card__footer';
     const price = document.createElement('div');
@@ -85,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = document.createElement('button');
     button.className = 'car-card__button';
     button.textContent = 'Детальніше';
-    // У майбутньому тут можна прив’язати відображення деталей: button.addEventListener(...)
+    // В будущем здесь можно повесить показ деталей: button.addEventListener('click', ...)
     footer.appendChild(button);
 
     content.appendChild(footer);
@@ -94,7 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
     return card;
   }
 
-  // 5) Допоміжна функція для витягання першої картинки
+
+  /* ——————————————————————————————————————————————————————————————————————— */
+  /* ФУНКЦИЯ 3: Помощник для получения первой картинки */
   function getImageSrc(images) {
     if (!images) return 'no-image.jpg';
     if (Array.isArray(images)) {
@@ -114,58 +128,92 @@ document.addEventListener('DOMContentLoaded', () => {
     return 'no-image.jpg';
   }
 
-  // 6) Функція для показу імені користувача та кнопки "Вийти"
-  async function showUserNameWithLogout() {
-    const userNameContainer = document.getElementById('user-name');
-    if (!userNameContainer) return;
 
-    // a) Отримуємо поточного користувача із Supabase Auth
-    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-    if (userError) {
-      console.error('Помилка при отриманні користувача:', userError);
-      return;
+  /* ——————————————————————————————————————————————————————————————————————— */
+  /* ФУНКЦИЯ 4: Показывает или приветствие + кнопку «Выйти», или «Войти»/«Зарегистрироваться». */
+  async function showUserNameOrAuthButtons() {
+    const container = document.getElementById('user-name');
+    if (!container) return;
+
+    // Очистим перед началом
+    container.innerHTML = '';
+
+    // a) Пробуем получить текущего пользователя через Supabase Auth
+    let user = null;
+    try {
+      const { data, error: userError } = await supabaseClient.auth.getUser();
+      if (userError) {
+        // Если ошибка – возможно, просто отсутствует сеанс. Логируем, но не роняем приложение.
+        console.warn('Ошибка при получении пользователя (скорее всего нет сессии):', userError.message);
+      } else {
+        user = data.user;
+      }
+    } catch (e) {
+      // Если вдруг что-то ещё упало – логируем. Считаем, что пользователь не залогинен.
+      console.warn('Исключение при попытке getUser():', e);
     }
+
+    // Если пользователя нет → показываем кнопки «Войти» и «Зарегистрироваться»
     if (!user) {
-      userNameContainer.textContent = '';
+      // <a> «Войти»
+      const loginLink = document.createElement('a');
+      loginLink.href = 'login.html';
+      loginLink.textContent = 'Увійти';
+      loginLink.className = 'header__user--link';
+
+      // <a> «Зареєструватися»
+      const signupLink = document.createElement('a');
+      signupLink.href = 'signup.html';
+      signupLink.textContent = 'Зареєструватися';
+      signupLink.className = 'header__user--link';
+
+      // Добавляем их в контейнер
+      container.append(loginLink, signupLink);
       return;
     }
 
-    // b) Завантажуємо дані профілю (first_name, last_name) з таблиці profiles
-    const { data: profile, error: profileError } = await supabaseClient
-      .from('profiles')
-      .select('first_name, last_name')
-      .eq('id', user.id)
-      .single();
+    // Если есть пользователь → загружаем его профиль (first_name, last_name)
+    let fullName = user.email; // по умолчанию отобразим email, если имени/фамилии не окажется
+    try {
+      const { data: profile, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('first_name, last_name')
+        .eq('id', user.id)
+        .single();
 
-    if (profileError) {
-      console.error('Помилка при зчитуванні профілю:', profileError);
-      return;
+      if (profileError) {
+        console.warn('Не удалось получить профиль, покажем email вместо имени:', profileError.message);
+      } else {
+        const fn = `${profile.first_name || ''}`.trim();
+        const ln = `${profile.last_name || ''}`.trim();
+        if (fn || ln) {
+          fullName = `${fn} ${ln}`.trim();
+        }
+      }
+    } catch (e) {
+      console.warn('Исключение при select профиля:', e);
     }
 
-    // c) Відображаємо "Привіт, <Імʼя>!"
-    const fullName = `${profile.first_name || ''} ${profile.last_name || ''}`.trim();
-    userNameContainer.textContent = fullName ? `Привіт, ${fullName}!` : '';
+    // c) Отображаем «Привіт, Ім’я Прізвище!»
+    container.textContent = `Привіт, ${fullName}!`;
 
-    // d) Додаємо кнопку "Вийти"
-    const logoutButton = document.createElement('button');
-    logoutButton.textContent = 'Вийти';
-    logoutButton.style.marginLeft = '8px';
-    logoutButton.style.background = 'transparent';
-    logoutButton.style.color = '#ffffff';
-    logoutButton.style.border = '1px solid #ffffff';
-    logoutButton.style.borderRadius = '4px';
-    logoutButton.style.padding = '3px 8px';
-    logoutButton.style.cursor = 'pointer';
+    // d) Добавляем кнопку «Вийти»
+    const logoutBtn = document.createElement('button');
+    logoutBtn.textContent = 'Вийти';
+    logoutBtn.id = 'logout-button';
 
-    logoutButton.addEventListener('click', async () => {
-      await supabaseClient.auth.signOut();
-      window.location.href = 'login.html';
+    logoutBtn.addEventListener('click', async () => {
+      // a) Выходим
+      const { error: signOutError } = await supabaseClient.auth.signOut();
+      if (signOutError) {
+        console.error('Ошибка при выходе:', signOutError.message);
+        return;
+      }
+      // b) После успешного выхода обновляем шапку (остаемся на index.html)
+      showUserNameOrAuthButtons();
     });
 
-    userNameContainer.append(logoutButton);
+    container.appendChild(logoutBtn);
   }
 
-  // 7) Виконуємо обидві головні функції
-  loadCars();
-  showUserNameWithLogout();
 });

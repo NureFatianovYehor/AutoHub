@@ -1,3 +1,4 @@
+
 /* ==================== Скидання і базові стилі ==================== */
 * {
   box-sizing: border-box;
@@ -42,7 +43,7 @@ main {
 }
 
 .header__container {
-  position: relative;        /* додаємо відносне позиціонування */
+  position: relative;        /* щоб потім легко центрирувати #user-name */
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -58,7 +59,7 @@ main {
   text-decoration: none;
 }
 
-/* === Ось тут на рівні контейнера ми центрируємо блок з ім’ям === */
+/* Центруємо блок із користувачем */
 .header__user {
   position: absolute;
   top: 50%;
@@ -66,16 +67,15 @@ main {
   transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
-  gap: 8px;                /* відстань між іменем і кнопкою */
-  white-space: nowrap;     /* щоб ім’я не переносилося */
+  gap: 8px;                /* відстань між ім’ям та кнопками */
+  white-space: nowrap;     /* щоб текст не переносився */
   font-size: 1rem;
   font-weight: 500;
   color: #ffffff;
-  z-index: 10;             /* зверху всіх інших елементів шапки */
+  z-index: 10;
 }
 
-/* ========================================================== */
-
+/* Навігація праворуч (може залишатися при лівому/центровому блоці) */
 .header__nav {
   display: flex;
   gap: 24px;
@@ -93,8 +93,9 @@ main {
   color: #bfbfbf; /* світло-сірий при наведенні */
 }
 
-/* Стилі для кнопки “Вийти” */
-#logout-button {
+/* Стиль для кнопок “Увійти” / “Зареєструватися” / “Вийти” */
+.header__user button,
+.header__user a {
   background: transparent;
   border: 1px solid #ffffff;
   color: #ffffff;
@@ -102,12 +103,18 @@ main {
   border-radius: 4px;
   font-size: 0.9rem;
   cursor: pointer;
+  text-decoration: none;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
-#logout-button:hover {
+
+.header__user button:hover,
+.header__user a:hover {
   background: #ffffff;
   color: #000000;
 }
+
+/* ==================== Інші стилі залишаються без змін ==================== */
+
 
 
 
@@ -164,20 +171,25 @@ main {
   margin-bottom: 20px;
 }
 
+
+
+
 .hero__button {
   display: inline-block;
-  background-color: #005eaa;
-  color: #ffffff;
+  background-color: transparent;      /* прозорий фон */
+  color: #ffffff;                     /* білий текст */
+  border: 1px solid #ffffff;          /* тонка біла рамка */
   text-decoration: none;
   font-size: 1rem;
   font-weight: 500;
   padding: 12px 24px;
   border-radius: 4px;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .hero__button:hover {
-  background-color: #004680;
+  background-color: rgba(255, 255, 255, 0.1); /* напівпрозорий білосніжний фон при ховері */
+  color: #ffffff;                             /* текст лишається білим */
 }
 
 
@@ -345,6 +357,9 @@ main {
   font-size: 0.95rem;
   line-height: 1.5;
 }
+
+
+
 
 /* === Блок «Наверх» === */
 .footer__back-to-top {

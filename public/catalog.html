@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Каталог авто | AutoHub</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .layout {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      gap: 32px;
+    }
+    .sidebar {
+      flex: 0 0 260px;
+      background-color: #1d1d1f;
+      color: white;
+      padding: 20px;
+      border-radius: 6px;
+    }
+    .sidebar h3 {
+      color: white;
+      margin-bottom: 10px;
+    }
+    .sidebar label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+    .sidebar select,
+    .sidebar input {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 8px;
+      background-color: #000;
+      border: 1px solid #444;
+      color: white;
+      border-radius: 4px;
+    }
+    .sidebar button {
+      width: 100%;
+      background-color: #005eaa;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .catalog__content {
+      flex: 1;
+    }
+    .cars-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .car-card {
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .car-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .car-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      background-color: #e0e0e0;
+    }
+    .car-card__content {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .car-card__price {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #005eaa;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header__container">
+      <a href="/" class="header__logo">AutoHub</a>
+      <nav class="header__nav">
+        <a href="/" class="header__link">Головна</a>
+        <a href="/add.html" class="header__link">Додати авто</a>
+        <a href="/contacts.html" class="header__link">Контакти</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <h3>Фільтр</h3>
+
+      <label>Тип кузова</label>
+      <select id="body_type">
+        <option value="">Усі</option>
+        <option value="sedan">Седан</option>
+        <option value="SUV">SUV</option>
+        <option value="купе">Купе</option>
+        <option value="хетчбек">Хетчбек</option>
+        <option value="універсал">Універсал</option>
+        <option value="кабріолет">Кабріолет</option>
+      </select>
+
+      <label>Марка</label>
+      <select id="brand">
+        <option value="">Усі</option>
+        <option value="Ford">Ford</option>
+        <option value="BMW">BMW</option>
+        <option value="Tesla">Tesla</option>
+      </select>
+
+      <label>Модель</label>
+      <input type="text" id="model" placeholder="Модель" />
+
+      <label>Рік випуску</label>
+      <input type="number" id="year" placeholder="2020" />
+
+      <label>Ціна до $</label>
+      <input type="number" id="price" placeholder="до 50000" />
+
+      <label>Пробіг до (км)</label>
+      <input type="number" id="mileage" placeholder="до 100000" />
+
+      <label>Тип палива</label>
+      <select id="fuel_type">
+        <option value="">Усі</option>
+        <option value="бензин">Бензин</option>
+        <option value="дизель">Дизель</option>
+        <option value="електро">Електро</option>
+        <option value="гібрид">Гібрид</option>
+      </select>
+
+      <label>Трансмісія</label>
+      <select id="transmission">
+        <option value="">Усі</option>
+        <option value="механіка">Механіка</option>
+        <option value="автомат">Автомат</option>
+      </select>
+
+      <label>Привід</label>
+      <select id="drive_type">
+        <option value="">Усі</option>
+        <option value="передній">Передній</option>
+        <option value="задній">Задній</option>
+        <option value="повний">Повний</option>
+      </select>
+
+      <label>Колір</label>
+      <input type="text" id="color" placeholder="чорний, білий..." />
+
+      <label>Прискорення до 100 км/год (сек)</label>
+      <input type="number" id="acceleration" step="0.1" placeholder="наприклад 5.0" />
+
+      <label>Макс. швидкість (км/год)</label>
+      <input type="number" id="max_speed" placeholder="до 250" />
+
+      <label>Потужність (к.с.)</label>
+      <input type="text" id="power" placeholder="200" />
+
+      <button onclick="applyFilters()">🔍 Пошук</button>
+    </aside>
+
+    <section class="catalog__content">
+      <h2 style="text-align:center; margin-bottom: 24px;">Каталог автомобілів</h2>
+      <div id="cars-container" class="cars-container">
+        <p>Завантаження...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__bottom" style="text-align:center; padding: 20px;">
+      © 2025 AutoHub. Всі права захищено.
+    </div>
+  </footer>
+
+  <script src="catalog.js"></script>
+</body>
+</html>
