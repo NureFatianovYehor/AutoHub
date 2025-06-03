@@ -1,0 +1,5 @@
+// public/config.js
+window.AUTOHUB_CONFIG = {
+  SUPABASE_URL:  'https://oyvfmxypflflandvrvle.supabase.co',
+  SUPABASE_KEY:  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95dmZteHlwZmxmbGFuZHZydmxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NzI2NDIsImV4cCI6MjA2NDQ0ODY0Mn0.o_vtP8PK4oBfs7XmpVNP7uL_jxJiQAMDISl-1of5kYU'
+};

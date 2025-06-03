@@ -1,0 +1,111 @@
+<!-- public/signup.html -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AutoHub | Реєстрація</title>
+  <!-- Підключаємо CSS для сторінки реєстрації -->
+  <link rel="stylesheet" href="signup.css" />
+</head>
+<body>
+  <div class="signup-container">
+    <h2 class="signup-title">Реєстрація AutoHub</h2>
+    <form id="signup-form" class="signup-form">
+      <label for="email">Електронна пошта</label>
+      <input type="email" id="email" placeholder="your@example.com" required />
+
+      <label for="password">Пароль</label>
+      <input type="password" id="password" placeholder="••••••••" required />
+
+      <label for="first_name">Імʼя</label>
+      <input type="text" id="first_name" placeholder="Ваше імʼя" required />
+
+      <label for="last_name">Прізвище</label>
+      <input type="text" id="last_name" placeholder="Ваше прізвище" required />
+
+      <button type="submit" class="signup-button">Зареєструватися</button>
+    </form>
+
+    <div class="signup-message" id="message"></div>
+    <div class="signup-link">
+      Вже є акаунт? <a href="login.html">Увійти</a>
+    </div>
+  </div>
+
+  <!-- 1) Спочатку підключаємо наш config.js, щоб window.AUTOHUB_CONFIG був доступний -->
+  <script src="config.js"></script>
+  <!-- 2) Потім завантажуємо Supabase SDK (UMD build) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
+
+  <script>
+    (function() {
+      // 3) Зчитуємо з config.js
+      const SUPABASE_URL      = window.AUTOHUB_CONFIG?.SUPABASE_URL;
+      const SUPABASE_ANON_KEY = window.AUTOHUB_CONFIG?.SUPABASE_KEY;
+
+      if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+        console.error('Помилка: SUPABASE_URL або SUPABASE_ANON_KEY не задано у config.js');
+        return;
+      }
+
+      // 4) Ініціалізуємо клієнт, але даємо йому ім'я supabaseClient (щоб не конфліктувати з window.supabase)
+      const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      const form       = document.getElementById('signup-form');
+      const messageDiv = document.getElementById('message');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        messageDiv.textContent = '';
+        messageDiv.style.color = 'red';
+
+        // 5) Збираємо дані з полів
+        const email     = document.getElementById('email').value.trim();
+        const password  = document.getElementById('password').value;
+        const firstName = document.getElementById('first_name').value.trim();
+        const lastName  = document.getElementById('last_name').value.trim();
+
+        if (!email || !password || !firstName || !lastName) {
+          messageDiv.textContent = 'Усі поля обов’язкові.';
+          return;
+        }
+
+        try {
+          // 6) Викликаємо signUp через supabaseClient.auth.signUp
+          const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
+            email:    email,
+            password: password
+          });
+          if (signUpError) throw signUpError;
+
+          const userId = signUpData.user.id;
+
+          // 7) Вставляємо запис у таблицю profiles
+          const { error: profileError } = await supabaseClient
+            .from('profiles')
+            .insert([{
+              id:         userId,
+              email:      email,
+              role:       'user',
+              first_name: firstName,
+              last_name:  lastName
+            }]);
+          if (profileError) throw profileError;
+
+          // 8) Повідомляємо про успіх і переадресовуємо
+          messageDiv.style.color = 'green';
+          messageDiv.textContent = 'Реєстрація успішна! Зараз переадресуємо…';
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 1200);
+
+        } catch (error) {
+          console.error(error);
+          messageDiv.textContent = error.message || 'Сталася помилка під час реєстрації.';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
