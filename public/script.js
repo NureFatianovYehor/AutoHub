@@ -1,3 +1,27 @@
+
+function getImageSrc(images) {
+  if (!images) return 'no-image.jpg';
+
+  if (Array.isArray(images)) {
+    return images[0];
+  }
+
+  if (typeof images === 'string') {
+    images = images.replace(/{|}/g, '').trim(); 
+    try {
+      const parsed = JSON.parse(images);
+      if (Array.isArray(parsed)) return parsed[0];
+    } catch (e) {
+      if (images.startsWith('data:image') || images.startsWith('http')) {
+        return images.split(',')[0];
+      }
+    }
+  }
+
+  return 'no-image.jpg';
+}
+
+// Твой остальной код...
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('cars-container');
   
@@ -6,16 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const card = document.createElement('div');
       card.className = 'car-card';
   
-      // Зображення (беремо перше посилання з масиву images)
       const img = document.createElement('img');
-      img.className = 'car-card__image';
-      if (car.images && Array.isArray(car.images) && car.images.length > 0) {
-        img.src = car.images[0];
-        img.alt = `${car.brand} ${car.model}`;
-      } else {
-        img.alt = 'Немає фото';
-        img.style.backgroundColor = '#bfbfbf';
-      }
+img.className = 'car-card__image';
+img.src = getImageSrc(car.images);
+img.alt = `${car.brand} ${car.model}` || 'Немає фото';
+
       card.appendChild(img);
   
       // Контент картки

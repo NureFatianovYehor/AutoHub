@@ -59,35 +59,40 @@
     color: #bfbfbf; /* світло-сірий при наведенні */
   }
   
-  /* ==================== Hero (банер) ==================== */
   .hero {
     position: relative;
-    width: 100%;
-    height: 60vh; /* висота ≈60% від висоти вікна */
-    background-image: url('https://images.unsplash.com/photo-1603787759267-e9d8c5ab878f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxOTI4NjR8MHwxfGFsbHx8fHx8fHx8&ixlib=rb-1.2.1&q=80&w=1920');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 700px;
+    overflow: hidden;
   }
   
-  /* Застосовуємо затемнення через реальний <div class="hero__overlay"> */
+  .hero__video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+  
   .hero__overlay {
     position: absolute;
-    inset: 0;                          /* top:0; right:0; bottom:0; left:0; */
-    background-color: rgba(0, 0, 0, 0.4); /* темно-чорний шар з 40% прозорості */
-    z-index: 1;                        /* щоб накладатися поверх фону, але під контентом */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 2;
   }
   
   .hero__content {
     position: relative;
-    z-index: 2;  /* піднятий над overlay, щоб текст і кнопка були зверху */
+    z-index: 3;
     text-align: center;
-    color: #ffffff;
-    max-width: 800px;
-    padding: 0 20px;
+    color: white;
+    padding-top: 100px;
   }
+  
   
   .hero__title {
     font-size: 2.8rem;
