@@ -55,14 +55,15 @@
         <option value="">Спочатку оберіть марку</option>
       </select>
 
-      <label for="year">Рік випуску</label>
-      <input type="number" id="year" placeholder="наприклад, 2020" />
+      <label>Рік випуску (від - до)</label>
+      <div style="display: flex; gap: 8px;">
+        <input type="number" id="year_from" placeholder="від" />
+        <input type="number" id="year_to" placeholder="до" />
+      </div>
+      
 
       <label for="price">Ціна до $</label>
       <input type="number" id="price" placeholder="до 50000" />
-
-      <label for="mileage">Пробіг до (км)</label>
-      <input type="number" id="mileage" placeholder="до 100000" />
 
       <label for="fuel_type">Тип палива</label>
       <select id="fuel_type">
