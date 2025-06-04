@@ -15,7 +15,7 @@
       <nav class="header__nav">
         <a href="/" class="header__link">Головна</a>
         <a href="/add.html" class="header__link">Додати авто</a>
-        <a href="/contacts.html" class="header__link">Контакти</a>
+        <a href="#contacts" class="header__link">Контакти</a>
       </nav>
     </div>
   </header>
@@ -27,16 +27,11 @@
     <aside class="sidebar">
       <h3>Фільтр</h3>
 
-      <label for="body_type">Тип кузова</label>
-      <select id="body_type">
-        <option value="">Усі</option>
-        <option value="sedan">Седан</option>
-        <option value="SUV">SUV</option>
-        <option value="купе">Купе</option>
-        <option value="хетчбек">Хетчбек</option>
-        <option value="універсал">Універсал</option>
-        <option value="кабріолет">Кабріолет</option>
-      </select>
+      <label>Тип кузова</label>
+<select id="body_type">
+  <option value="">Усі</option>
+</select>
+
 
       <label for="brand">Марка</label>
       <select id="brand">
@@ -48,7 +43,10 @@
       </select>
 
       <label for="model">Модель</label>
-      <input type="text" id="model" placeholder="Модель" />
+      <select id="model" disabled>
+        <option value="">Спочатку оберіть марку</option>
+      </select>
+      
 
       <label for="year">Рік випуску</label>
       <input type="number" id="year" placeholder="наприклад, 2020" />
@@ -108,15 +106,59 @@
   </div>
   <!-- ==================== /LAYOUT ==================== -->
 
-  <!-- ==================== FOOTER ==================== -->
-  <footer class="footer">
-    <div class="footer__bottom">
-      <p>© 2025 AutoHub. Всі права захищено.</p>
-    </div>
-  </footer>
-  <!-- ==================== /FOOTER ==================== -->
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer" id="contacts">
+  <!-- Блок «Наверх» -->
+  <div class="footer__back-to-top">
+    <a href="#top">Наверх ↑</a>
+  </div>
 
-  <!-- Підключаємо скрипт фільтрації/рендеру -->
-  <script src="catalog.js"></script>
+  <!-- Верхняя часть футера: три колонки -->
+  <div class="footer__columns">
+    <!-- Колонка 1: Покупка -->
+    <div class="footer__column">
+      <h3 class="footer__title">Покупка</h3>
+      <a href="/cars" class="footer__link">Авто в наявності</a>
+      <a href="/configurator" class="footer__link">Конфігуратор</a>
+      <a href="/accessories" class="footer__link">Аксесуари</a>
+    </div>
+
+    <!-- Колонка 2: Сервіс -->
+    <div class="footer__column">
+      <h3 class="footer__title">Сервіс</h3>
+      <a href="/service" class="footer__link">Техобслуговування</a>
+      <a href="/warranty" class="footer__link">Гарантія</a>
+      <a href="/spare-parts" class="footer__link">Запчастини</a>
+    </div>
+
+    <!-- Колонка 3: Компанія -->
+    <div class="footer__column">
+      <h3 class="footer__title">Компанія</h3>
+      <a href="/about" class="footer__link">Про нас</a>
+      <a href="#contacts" class="footer__link">Контакти</a>
+      <a href="/careers" class="footer__link">Вакансії</a>
+    </div>
+  </div>
+
+  <!-- Нижняя часть футера: юридические ссылки + контакты -->
+  <div class="footer__bottom">
+    <div class="footer__bottom-links">
+      <a href="/privacy-policy" class="footer__bottom-link">Політика конфіденційності</a>
+      <a href="/terms" class="footer__bottom-link">Умови використання</a>
+      <a href="/feedback" class="footer__bottom-link">Зворотній зв'язок</a>
+    </div>
+
+    <div class="footer__contact">
+      <span class="footer__contact-item">📧 autohub74@gmail.com</span>
+      <span class="footer__contact-item">📞 +38 095 860 15 88</span>
+    </div>
+  </div>
+</footer>
+<!-- ==================== /FOOTER ==================== -->
+
+
+
+<!-- Підключаємо скрипт фільтрації/рендеру -->
+<script src="catalog.js"></script>
 </body>
 </html>

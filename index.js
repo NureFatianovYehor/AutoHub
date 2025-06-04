@@ -131,3 +131,21 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Сервер запущено на http://localhost:${PORT}`);
 });
+
+app.get('/models', async (req, res) => {
+  const { brand } = req.query;
+
+  if (!brand) {
+    return res.status(400).json({ error: 'Параметр brand обов’язковий' });
+  }
+
+  const { data, error } = await supabase
+    .from('cars')
+    .select('model')
+    .eq('brand', brand);
+
+  if (error) return res.status(500).json({ error: error.message });
+
+  const uniqueModels = [...new Set(data.map(car => car.model))];
+  res.json(uniqueModels);
+});
