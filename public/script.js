@@ -13,21 +13,40 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2) Инициализируем клиента Supabase (UMD-бандл supabase.js должен быть уже подключён)
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // 3) Загружаем машины в каталог
+  // 3) Загружаем машины в каталог (эта функция осталась без изменений)
   loadCars();
 
-  // 4) Сразу показываем шапку: либо приветствие + кнопка «Выйти», либо «Войти»/«Зарегистрироваться»
-  showUserNameOrAuthButtons();
-
-
   /* ——————————————————————————————————————————————————————————————————————— */
-  /* ФУНКЦИЯ 1: Загружает и рендерит машины */
+  /* ФУНКЦИЯ 1: Загружает и рендерит машины (с учётом избранного) */
   async function loadCars() {
     const container = document.getElementById('cars-container');
     if (!container) return;
 
     try {
-      // Запрос к таблице "cars"
+      // 1) Получаем тек. пользователя (если есть)
+      let currentUser = null;
+      try {
+        const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+        if (!userError) currentUser = user;
+      } catch (e) {
+        console.warn('Не удалось получить пользователя:', e);
+      }
+
+      // 2) Если пользователь авторизован, получаем его избранное
+      let userFavoritesSet = new Set();
+      if (currentUser) {
+        const { data: favRows, error: favError } = await supabaseClient
+          .from('favorites')
+          .select('car_id')
+          .eq('user_id', currentUser.id);
+        if (favError) {
+          console.warn('Не удалось получить избранное:', favError.message);
+        } else {
+          favRows.forEach(row => userFavoritesSet.add(row.car_id));
+        }
+      }
+
+      // 3) Запрашиваем все машины
       const { data: cars, error: carsError } = await supabaseClient
         .from('cars')
         .select('*');
@@ -39,10 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Очищаем контейнер и добавляем карточки
+      // 4) Очищаем контейнер и добавляем карточки (передавая userFavoritesSet)
       container.innerHTML = '';
       cars.forEach(car => {
-        const card = createCarCard(car);
+        const card = createCarCard(car, userFavoritesSet);
         container.appendChild(card);
       });
 
@@ -53,11 +72,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  /* ——————————————————————————————————————————————————————————————————————— */
-  /* ФУНКЦИЯ 2: Создаёт одну карточку машины */
-  function createCarCard(car) {
+  /* ФУНКЦИЯ 2: Создаёт одну карточку машины (с «сердечком») */
+  function createCarCard(car, userFavoritesSet) {
     const card = document.createElement('div');
     card.className = 'car-card';
+    card.style.position = 'relative'; // чтобы «сердечко» позиционировалось
+
+    // Иконка «сердечко»
+    const heart = document.createElement('span');
+    heart.className = 'favorite-icon';
+    if (userFavoritesSet && userFavoritesSet.has(car.id)) {
+      heart.classList.add('active');
+    }
+    heart.dataset.carId = car.id;
+    card.appendChild(heart);
 
     // Изображение
     const img = document.createElement('img');
@@ -97,17 +125,49 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = document.createElement('button');
     button.className = 'car-card__button';
     button.textContent = 'Детальніше';
-    // В будущем здесь можно повесить показ деталей: button.addEventListener('click', ...)
     footer.appendChild(button);
 
     content.appendChild(footer);
     card.appendChild(content);
 
+    // Слушатель клика по «сердечку»
+    heart.addEventListener('click', async () => {
+      // 1) Проверяем, есть ли текущий пользователь
+      const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+      if (userError || !user) {
+        // Если не залогинен – перенаправляем на страницу логина
+        window.location.href = 'login.html';
+        return;
+      }
+      const carId = heart.dataset.carId;
+      if (heart.classList.contains('active')) {
+        // Уже в избранном → удаляем
+        const { error: delError } = await supabaseClient
+          .from('favorites')
+          .delete()
+          .match({ user_id: user.id, car_id: carId });
+        if (delError) {
+          console.error('Ошибка удаления из избранного:', delError.message);
+          return;
+        }
+        heart.classList.remove('active');
+      } else {
+        // Ещё не в избранном → добавляем
+        const { error: insertError } = await supabaseClient
+          .from('favorites')
+          .insert({ user_id: user.id, car_id: carId });
+        if (insertError) {
+          console.error('Ошибка добавления в избранное:', insertError.message);
+          return;
+        }
+        heart.classList.add('active');
+      }
+    });
+
     return card;
   }
 
 
-  /* ——————————————————————————————————————————————————————————————————————— */
   /* ФУНКЦИЯ 3: Помощник для получения первой картинки */
   function getImageSrc(images) {
     if (!images) return 'no-image.jpg';
@@ -126,94 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     return 'no-image.jpg';
-  }
-
-
-  /* ——————————————————————————————————————————————————————————————————————— */
-  /* ФУНКЦИЯ 4: Показывает или приветствие + кнопку «Выйти», или «Войти»/«Зарегистрироваться». */
-  async function showUserNameOrAuthButtons() {
-    const container = document.getElementById('user-name');
-    if (!container) return;
-
-    // Очистим перед началом
-    container.innerHTML = '';
-
-    // a) Пробуем получить текущего пользователя через Supabase Auth
-    let user = null;
-    try {
-      const { data, error: userError } = await supabaseClient.auth.getUser();
-      if (userError) {
-        // Если ошибка – возможно, просто отсутствует сеанс. Логируем, но не роняем приложение.
-        console.warn('Ошибка при получении пользователя (скорее всего нет сессии):', userError.message);
-      } else {
-        user = data.user;
-      }
-    } catch (e) {
-      // Если вдруг что-то ещё упало – логируем. Считаем, что пользователь не залогинен.
-      console.warn('Исключение при попытке getUser():', e);
-    }
-
-    // Если пользователя нет → показываем кнопки «Войти» и «Зарегистрироваться»
-    if (!user) {
-      // <a> «Войти»
-      const loginLink = document.createElement('a');
-      loginLink.href = 'login.html';
-      loginLink.textContent = 'Увійти';
-      loginLink.className = 'header__user--link';
-
-      // <a> «Зареєструватися»
-      const signupLink = document.createElement('a');
-      signupLink.href = 'signup.html';
-      signupLink.textContent = 'Зареєструватися';
-      signupLink.className = 'header__user--link';
-
-      // Добавляем их в контейнер
-      container.append(loginLink, signupLink);
-      return;
-    }
-
-    // Если есть пользователь → загружаем его профиль (first_name, last_name)
-    let fullName = user.email; // по умолчанию отобразим email, если имени/фамилии не окажется
-    try {
-      const { data: profile, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('first_name, last_name')
-        .eq('id', user.id)
-        .single();
-
-      if (profileError) {
-        console.warn('Не удалось получить профиль, покажем email вместо имени:', profileError.message);
-      } else {
-        const fn = `${profile.first_name || ''}`.trim();
-        const ln = `${profile.last_name || ''}`.trim();
-        if (fn || ln) {
-          fullName = `${fn} ${ln}`.trim();
-        }
-      }
-    } catch (e) {
-      console.warn('Исключение при select профиля:', e);
-    }
-
-    // c) Отображаем «Привіт, Ім’я Прізвище!»
-    container.textContent = `Привіт, ${fullName}!`;
-
-    // d) Добавляем кнопку «Вийти»
-    const logoutBtn = document.createElement('button');
-    logoutBtn.textContent = 'Вийти';
-    logoutBtn.id = 'logout-button';
-
-    logoutBtn.addEventListener('click', async () => {
-      // a) Выходим
-      const { error: signOutError } = await supabaseClient.auth.signOut();
-      if (signOutError) {
-        console.error('Ошибка при выходе:', signOutError.message);
-        return;
-      }
-      // b) После успешного выхода обновляем шапку (остаемся на index.html)
-      showUserNameOrAuthButtons();
-    });
-
-    container.appendChild(logoutBtn);
   }
 
 });

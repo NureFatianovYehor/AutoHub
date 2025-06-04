@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Улюблене | AutoHub</title>
+  <!-- 1) Підключаємо ваш основний CSS (де лежать стилі для .header, .header__user тощо) -->
+  <link rel="stylesheet" href="style.css" />
+  <!-- 2) Якщо є окремий CSS лише для сторінки «Улюблене», підключіть його теж -->
+  <link rel="stylesheet" href="favorites.css" />
+</head>
+<body class="page-container">
+  <!-- ==================== HEADER ==================== -->
+  <header class="header">
+    <div class="header__container">
+      <a href="/" class="header__logo">AutoHub</a>
+      <!-- Контейнер для виводу імені користувача або кнопок Увійти/Зареєструватися -->
+      <div id="user-name" class="header__user"></div>
+      <nav class="header__nav">
+        <a href="/" class="header__link">Головна</a>
+        <a href="/add.html" class="header__link">Додати авто</a>
+        <!-- Вказуємо active для поточної сторінки -->
+        <a href="/favorites.html" class="header__link active">Улюблене</a>
+        <a href="#contacts" class="header__link">Контакти</a>
+      </nav>
+    </div>
+  </header>
+  <!-- ==================== /HEADER ==================== -->
+
+  <!-- ==================== ВМІСТ СТОРІНКИ ==================== -->
+  <main class="catalog">
+    <div class="catalog__container">
+      <h2 class="catalog__title">Улюблені автомобілі</h2>
+      <div id="favorites-container" class="cars-container">
+        <p class="loading">Завантаження...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer" id="contacts">
+    <div class="footer__back-to-top">
+      <a href="#top">Наверх ↑</a>
+    </div>
+
+    <div class="footer__columns">
+      <div class="footer__column">
+        <h3 class="footer__title">Покупка</h3>
+        <a href="/cars" class="footer__link">Авто в наявності</a>
+        <a href="/configurator" class="footer__link">Конфігуратор</a>
+        <a href="/accessories" class="footer__link">Аксесуари</a>
+        <a href="/favorites.html" class="footer__link">Улюблене</a>
+      </div>
+      <div class="footer__column">
+        <h3 class="footer__title">Сервіс</h3>
+        <a href="/service" class="footer__link">Техобслуговування</a>
+        <a href="/warranty" class="footer__link">Гарантія</a>
+        <a href="/spare-parts" class="footer__link">Запчастини</a>
+      </div>
+      <div class="footer__column">
+        <h3 class="footer__title">Компанія</h3>
+        <a href="/about" class="footer__link">Про нас</a>
+        <a href="#contacts" class="footer__link">Контакти</a>
+        <a href="/careers" class="footer__link">Вакансії</a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="footer__bottom-links">
+        <a href="/privacy-policy" class="footer__bottom-link">Політика конфіденційності</a>
+        <a href="/terms" class="footer__bottom-link">Умови використання</a>
+        <a href="/feedback" class="footer__bottom-link">Зворотній зв'язок</a>
+      </div>
+      <div class="footer__contact">
+        <span class="footer__contact-item">📧 autohub74@gmail.com</span>
+        <span class="footer__contact-item">📞 +38 095 860 15 88</span>
+      </div>
+    </div>
+  </footer>
+  <!-- ==================== /FOOTER ==================== -->
+
+  <!-- ==================== ПІДКЛЮЧАЄМО JS ==================== -->
+  <!-- 1) Спочатку config.js (налаштування Supabase) -->
+  <script src="config.js"></script>
+  <!-- 2) Далі UMD-бандл supabase-js -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
+  <!-- 3) Потім – ваш загальний common.js (де викликається showUserNameOrAuthButtons()) -->
+  <script src="common.js"></script>
+  <!-- 4) І нарешті – саме скрипт для сторінки «Улюблене» -->
+  <script src="favorites.js"></script>
+</body>
+</html>

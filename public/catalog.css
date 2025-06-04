@@ -20,16 +20,18 @@ body {
 }
 
 /* ==================== HEADER (шапка) ==================== */
+/* ==================== Header (шапка) ==================== */
 .header {
   position: sticky;
   top: 0;
   width: 100%;
-  background-color: #000000;
+  background-color: #000000; /* чорний фон */
   color: #ffffff;
   z-index: 1000;
 }
 
 .header__container {
+  position: relative;        /* щоб #user-name можна було центровано вивести */
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -45,6 +47,23 @@ body {
   text-decoration: none;
 }
 
+/* Блок з іменем користувача (універсально центруватиметься) */
+.header__user {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;                /* відстань між ім’ям і кнопкою */
+  white-space: nowrap;     /* щоб текст не переносився */
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+  z-index: 10;
+}
+
+/* Навігація праворуч */
 .header__nav {
   display: flex;
   gap: 24px;
@@ -59,8 +78,29 @@ body {
 }
 
 .header__link:hover {
-  color: #bfbfbf;
+  color: #bfbfbf; /* світло-сірий при наведенні */
 }
+
+/* Стилі для кнопок «Увійти», «Зареєструватися» та «Вийти» */
+.header__user button,
+.header__user a {
+  background: transparent;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.header__user button:hover,
+.header__user a:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
 
 /* ==================== КОНТЕЙНЕР ДЛЯ SIDEBAR + КАРТОЧЕК ==================== */
 .layout {
@@ -200,6 +240,61 @@ body {
   color: #005eaa;
   margin-top: auto; /* прижать цену к низу */
 }
+/* ==================== ІКОНКА «СЕРДЕЧКО» ==================== */
+/* Контейнер для картки повинен мати position: relative; */
+/* Тому ми припускаємо, що .car-card уже є position: relative у вашому CSS. 
+   Якщо ні – можна додати його теж. */
+
+   .car-card {
+    position: relative; /* щоб «сердечко» могло позиціюватись по відношенню до картки */
+  }
+  
+  .car-card {
+    position: relative; /* обов’язково, щоб «сердечко» стало відносно картки */
+  }
+  
+  .car-card__content {
+    position: relative;   /* Щоб сердечко позиціонувалося відносно цього блоку */
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  /* Саме тут відбудеться абсолютне позиціювання зовсім всередині content */
+  .favorite-icon {
+    position: absolute;
+    /* Позиція: 12px зверху від верху content, і 12px справа від правого краю content */
+    top: 12px;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    color: #1d1d1f;  /* графітовий колір для контуру */
+    user-select: none;
+  }
+  
+  .favorite-icon:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Контурне серце */
+  .favorite-icon::before {
+    content: '♡';
+  }
+  
+  /* Заповнене сердечко при наявності класу active */
+  .favorite-icon.active::before {
+    content: '♥';
+    color: #1d1d1f; /* графітовий колір заливки */
+  }
+  
 
 /* ==================== СООБЩЕНИЯ ЗАГРУЗКИ / ОТСУТСТВИЯ ДАННЫХ ==================== */
 .loading,
@@ -326,4 +421,27 @@ body {
 
 html {
   scroll-behavior: smooth;
+}
+
+/* =========== AUTH ALERT: стилі =========== */
+#auth-alert {
+  display: none;               /* Ховаємо за замовчуванням */
+  background-color: #1d1d1f;   /* Графітовий фон */
+  color: #ffffff;              /* Білий текст */
+  padding: 12px 20px;          /* Відступи зверху/знизу та ліворуч/праворуч */
+  margin: 8px auto;            /* Зовнішні відступи: зверху/знизу 8px, по центру по горизонталі */
+  border-radius: 6px;          /* Закруглення кутів */
+  text-align: center;          /* Текст по центру */
+  max-width: 600px;            /* Максимальна ширина: 600px */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);  /* Трохи тіні, щоб виділити віконце */
+  font-size: 1rem;
+  line-height: 1.4;
+  position: sticky;            /* Щоб «прилипати» під шапкою при скролі */
+  top: 48px;                   /* Відступ зверху: під шапкою (за потреби скоригуйте) */
+  z-index: 1001;               /* Вище, ніж шапка (z-index шапки – 1000) */
+}
+
+/* Коли потрібно показати повідомлення, просто додаємо клас .show: */
+#auth-alert.show {
+  display: block;
 }
