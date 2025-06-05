@@ -3,45 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Улюблене | AutoHub</title>
-  <!-- 1) Основний CSS (header, footer, загальні стилі) -->
+  <title>Деталі автомобіля | AutoHub</title>
+
+  <!-- 1) Підключаємо загальні стилі (header/footer, базові стилі, картки тощо) -->
   <link rel="stylesheet" href="style.css" />
-  <!-- 2) Спеціальні стилі для сторінки «Улюблене» -->
-  <link rel="stylesheet" href="favorites.css" />
+
+  <!-- 2) Якщо у вас є спеціальний файл стилів лише для detail-сторінки, підключіть його тут -->
+  <link rel="stylesheet" href="detail.css" />
 </head>
 <body class="page-container">
+
   <!-- ==================== HEADER ==================== -->
   <header class="header">
     <div class="header__container">
       <a href="/" class="header__logo">AutoHub</a>
-      <!-- У цьому контейнері буде ім’я користувача або кнопки «Увійти/Зареєструватися» -->
+      <!-- Сюди common.js запише “Привіт, Ім’я!” або кнопки “Увійти/Зареєструватися” -->
       <div id="user-name" class="header__user"></div>
+
       <nav class="header__nav">
         <a href="/" class="header__link">Головна</a>
         <a href="/add.html" class="header__link">Додати авто</a>
-        <a href="/favorites.html" class="header__link active">Улюблене</a>
+        <a href="/favorites.html" class="header__link">Улюблене</a>
         <a href="#contacts" class="header__link">Контакти</a>
       </nav>
     </div>
   </header>
   <!-- ==================== /HEADER ==================== -->
 
+
   <!-- ==================== ГОЛОВНИЙ КОНТЕНТ ==================== -->
   <main class="catalog">
     <div class="catalog__container">
-      <h2 class="catalog__title">Улюблені автомобілі</h2>
-      <div id="favorites-container" class="cars-container">
-        <p class="loading">Завантаження...</p>
+      <!-- Назва розділу -->
+      <h2 class="catalog__title">Деталі автомобіля</h2>
+
+      <!-- Сюди через JavaScript вставимо всю інформацію про одну машину -->
+      <div id="car-detail-container" class="car-detail-container">
+        <!-- Тимчасово виводимо loading, доки чекаємо дані з Supabase -->
+        <p class="loading">Завантаження... Будь ласка, зачекайте.</p>
       </div>
     </div>
   </main>
   <!-- ==================== /ГОЛОВНИЙ КОНТЕНТ ==================== -->
+
 
   <!-- ==================== FOOTER ==================== -->
   <footer class="footer" id="contacts">
     <div class="footer__back-to-top">
       <a href="#top">Наверх ↑</a>
     </div>
+
     <div class="footer__columns">
       <div class="footer__column">
         <h3 class="footer__title">Покупка</h3>
@@ -63,6 +74,7 @@
         <a href="/careers" class="footer__link">Вакансії</a>
       </div>
     </div>
+
     <div class="footer__bottom">
       <div class="footer__bottom-links">
         <a href="/privacy-policy" class="footer__bottom-link">Політика конфіденційності</a>
@@ -77,10 +89,15 @@
   </footer>
   <!-- ==================== /FOOTER ==================== -->
 
+
   <!-- ==================== ПІДКЛЮЧАЄМО JS ==================== -->
+  <!-- 1) Спочатку – config.js: тут визначаються AUTOHUB_CONFIG з вашим SUPABASE_URL і SUPABASE_KEY -->
   <script src="config.js"></script>
+  <!-- 2) Підключаємо UMD-бандл supabase.js -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
+  <!-- 3) Підключаємо загальний файл common.js, який робить header “Привіт, Ім’я!”/“Увійти” -->
   <script src="common.js"></script>
-  <script src="favorites.js"></script>
+  <!-- 4) Підключаємо script для detail‐сторінки -->
+  <script src="detail.js"></script>
 </body>
 </html>
