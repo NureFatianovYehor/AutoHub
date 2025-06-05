@@ -116,13 +116,14 @@ async function renderCars(cars) {
     img.alt = `${car.brand} ${car.model}`;
     card.appendChild(img);
 
-    // 5.4) Створюємо блок з контентом
+    // 5.4) Створюємо блок з контентом (тут без ціни)
     const content = document.createElement('div');
     content.className = 'car-card__content';
     content.innerHTML = `
-      <div class="car-card__brand-model"><strong>${car.brand} ${car.model}</strong> (${car.year})</div>
+      <div class="car-card__brand-model">
+        <strong>${car.brand} ${car.model}</strong> (${car.year})
+      </div>
       <div class="car-card__title">${car.title || ''}</div>
-      <div class="car-card__price">$${Number(car.price).toLocaleString()}</div>
     `;
 
     // 5.5) Створюємо іконку «сердечко» всередині content
@@ -131,7 +132,6 @@ async function renderCars(cars) {
     if (userFavs.has(car.id)) {
       heart.classList.add('active');
     }
-
     heart.addEventListener('click', async () => {
       // 5.6) При кліку: перевіряємо, чи користувач залогінений
       const { data: { user }, error: userErr } = await supabaseClient.auth.getUser();
@@ -144,7 +144,7 @@ async function renderCars(cars) {
 
       // 5.7) Якщо зараз active → видаляємо з favorites, інакше додаємо
       if (heart.classList.contains('active')) {
-        // Видаляємо
+        // Видаляємо з улюблених
         const { error: delErr } = await supabaseClient
           .from('favorites')
           .delete()
@@ -156,7 +156,7 @@ async function renderCars(cars) {
         }
         heart.classList.remove('active');
       } else {
-        // Додаємо
+        // Додаємо в улюблені
         const { error: insErr } = await supabaseClient
           .from('favorites')
           .insert({ user_id: userId, car_id: carId });
@@ -169,10 +169,32 @@ async function renderCars(cars) {
     });
 
     content.appendChild(heart);
+
+        // …попередня частина renderCars…
+
+    // 5.8) Блок із ціною та кнопкою «Детальніше», вирівняний у рядок
+    const footer = document.createElement('div');
+    footer.className = 'car-card__footer';
+
+    // 5.8.1) Ціна (ліворуч)
+    const price = document.createElement('div');
+    price.className = 'car-card__price';
+    price.textContent = `$${Number(car.price || 0).toLocaleString()}`;
+    footer.appendChild(price);
+
+    // 5.8.2) Кнопка «Детальніше» (праворуч)
+    const link = document.createElement('a');
+    link.className = 'car-card__button';
+    link.textContent = 'Детальніше';
+    link.href = `detail.html?id=${car.id}`;
+    footer.appendChild(link);
+
+    content.appendChild(footer);
     card.appendChild(content);
     container.appendChild(card);
   });
 }
+
 
 // ---------------------------------------------
 // 6) Фільтрація: дружній код (додані діапазони року, "Усі" для селектів)

@@ -334,6 +334,8 @@ main {
 }
 
 .car-card__button {
+  /* ...остальные стили, как были: */
+  display: inline-block;
   background-color: transparent;
   border: 1px solid #005eaa;
   color: #005eaa;
@@ -342,12 +344,19 @@ main {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
+
+  /* вот эта строчка убирает подчёркивание у ссылки */
+  text-decoration: none;
 }
 
+/* при наведении оставляем фон с заливкой, как раньше */
 .car-card__button:hover {
   background-color: #005eaa;
   color: #ffffff;
+  /* подчёркивание нам не нужно и во hover-состоянии */
+  text-decoration: none;
 }
+
 
 /* ==================== Footer (розміщення і стилі) ==================== */
 .footer {

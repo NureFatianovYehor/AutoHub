@@ -188,6 +188,7 @@ body {
 }
 
 /* ==================== ОДНА КАРТОЧКА ==================== */
+
 .car-card {
   background-color: #ffffff;
   border-radius: 8px;
@@ -232,14 +233,6 @@ body {
 }
 
 
-
-
-.car-card__price {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #005eaa;
-  margin-top: auto; /* прижать цену к низу */
-}
 /* ==================== ІКОНКА «СЕРДЕЧКО» ==================== */
 /* Контейнер для картки повинен мати position: relative; */
 /* Тому ми припускаємо, що .car-card уже є position: relative у вашому CSS. 
@@ -261,6 +254,41 @@ body {
     flex-direction: column;
     justify-content: space-between;
   }
+ /* ==================== Футер картки: ціна + кнопка ==================== */
+.car-card__footer {
+  display: flex;
+  justify-content: space-between; /* розгорнути ціну та кнопку по краях */
+  align-items: center;            /* вирівняти по вертикалі */
+  margin-top: 12px;               /* відступ зверху, щоб не прилипало до тексту */
+}
+
+/* Стиль для ціни (лівий блок у футері) */
+.car-card__price {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #005eaa;
+}
+
+/* Стиль для кнопки (правий блок у футері) */
+.car-card__button {
+  display: inline-block;         /* щоб padding і border працювали як у кнопки */
+  background-color: transparent;
+  border: 1px solid #005eaa;
+  color: #005eaa;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;         /* прибираємо підкреслення */
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.car-card__button:hover {
+  background-color: #005eaa;
+  color: #ffffff;
+  text-decoration: none;         /* переконуємося: при hover теж немає підкреслення */
+}
+
   
   /* Саме тут відбудеться абсолютне позиціювання зовсім всередині content */
   .favorite-icon {
