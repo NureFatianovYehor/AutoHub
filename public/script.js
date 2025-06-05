@@ -1,4 +1,5 @@
 // === script.js ===
+let selectedBodyType = ''; // тип кузова, який обрано у верхньому меню
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1) Считываем настройки Supabase из config.js
@@ -9,6 +10,43 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Не найден AUTOHUB_CONFIG с SUPABASE_URL / SUPABASE_KEY.');
     return;
   }
+  
+
+  function filterByBodyType(bodyType) {
+    fetch('/cars')
+      .then(res => res.json())
+      .then(result => {
+        const cars = Array.isArray(result) ? result : result.data;
+  
+        const filtered = bodyType
+          ? cars.filter(car => car.body_type?.toLowerCase() === bodyType.toLowerCase())
+          : cars;
+  
+        renderCars(filtered);
+      })
+      .catch(err => {
+        console.error('Помилка при завантаженні авто:', err);
+      });
+  }
+  
+  document.querySelectorAll('.categories__link').forEach(link => {
+    link.addEventListener('click', event => {
+      event.preventDefault();
+  
+      document.querySelectorAll('.categories__link').forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+  
+      selectedBodyType = link.dataset.body || ''; // оновлюємо глобальну змінну
+  
+      // Викликаємо завантаження заново (тільки для index.html)
+      if (typeof loadCars === 'function') {
+        loadCars();
+      }
+    });
+  });
+  
+  
+
 
   // 2) Инициализируем клиента Supabase (UMD-бандл supabase.js должен быть уже подключён)
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -21,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadCars() {
     const container = document.getElementById('cars-container');
     if (!container) return;
-
+  
     try {
       // 1) Получаем тек. пользователя (если есть)
       let currentUser = null;
@@ -31,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (e) {
         console.warn('Не удалось получить пользователя:', e);
       }
-
+  
       // 2) Если пользователь авторизован, получаем его избранное
       let userFavoritesSet = new Set();
       if (currentUser) {
@@ -45,31 +83,37 @@ document.addEventListener('DOMContentLoaded', () => {
           favRows.forEach(row => userFavoritesSet.add(row.car_id));
         }
       }
-
+  
       // 3) Запрашиваем все машины
       const { data: cars, error: carsError } = await supabaseClient
         .from('cars')
         .select('*');
-
+  
       if (carsError) throw carsError;
-
+  
       if (!Array.isArray(cars) || cars.length === 0) {
-        container.innerHTML = '<p class="no-cars">В базе пока нет автомобилей.</p>';
+        container.innerHTML = '<p class="no-cars">В базі поки немає автомобілів.</p>';
         return;
       }
-
-      // 4) Очищаем контейнер и добавляем карточки (передавая userFavoritesSet)
+  
+      // ✅ 4) Фільтрація по типу кузова
+      const filteredCars = selectedBodyType
+        ? cars.filter(car => car.body_type?.toLowerCase() === selectedBodyType)
+        : cars;
+  
+      // 5) Очищаем контейнер и добавляем карточки
       container.innerHTML = '';
-      cars.forEach(car => {
+      filteredCars.forEach(car => {
         const card = createCarCard(car, userFavoritesSet);
         container.appendChild(card);
       });
-
+  
     } catch (err) {
       console.error('Ошибка loadCars():', err);
-      container.innerHTML = `<p class="error">Не удалось загрузить данные: ${err.message}</p>`;
+      container.innerHTML = `<p class="error">Не вдалося завантажити дані: ${err.message}</p>`;
     }
   }
+  
 
 
   /* ФУНКЦИЯ 2: Создаёт одну карточку машины (с «сердечком») */
