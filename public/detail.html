@@ -29,6 +29,11 @@
   </header>
   <!-- ==================== /HEADER ==================== -->
 
+  <!-- ==================== AUTH ALERT ==================== -->
+  <!-- Обов’язково додаємо цей блок! -->
+  <div id="auth-alert"></div>
+  <!-- Повідомлення «Щоб купити авто, будь ласка, увійдіть...» буде з’являтись сюди. -->
+
   <!-- ==================== ГОЛОВНИЙ КОНТЕНТ ==================== -->
   <main class="catalog">
     <div class="catalog__container">
@@ -92,8 +97,7 @@
   <!-- 4) EmailJS SDK — появляется глобальный объект emailjs() -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    // 4.1) Здесь вставьте свой Public Key (User ID) из EmailJS → Account → API Keys
-    // Вы предоставили скрин: Public Key = "kd530yALMMejmOceW"
+    // 4.1) Ваш Public Key из EmailJS (как на скрине): "kd530yALMMejmOceW"
     emailjs.init("kd530yALMMejmOceW");
   </script>
 
