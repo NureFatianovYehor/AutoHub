@@ -166,10 +166,12 @@ document.addEventListener('DOMContentLoaded', () => {
     price.textContent = `$${Number(car.price || 0).toLocaleString()}`;
     footer.appendChild(price);
 
-    const button = document.createElement('button');
+    const button = document.createElement('a');
     button.className = 'car-card__button';
     button.textContent = 'Детальніше';
+    button.href = `detail.html?id=${car.id}`;
     footer.appendChild(button);
+    
 
     content.appendChild(footer);
     card.appendChild(content);
