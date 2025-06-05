@@ -179,35 +179,40 @@ async function renderCars(cars) {
 // ---------------------------------------------
 function applyFilters() {
   const get = id => document.getElementById(id)?.value.trim().toLowerCase() || '';
-  const yearFrom = document.getElementById('year_from').value.trim();
-  const yearTo = document.getElementById('year_to').value.trim();
+
+  const yearFrom = document.getElementById('year_from')?.value.trim();
+  const yearTo   = document.getElementById('year_to')?.value.trim();
+  const priceFrom = document.getElementById('price_from')?.value.trim();
+  const priceTo   = document.getElementById('price_to')?.value.trim();
+  const accelerationFrom = document.getElementById('acceleration_from')?.value.trim();
+  const accelerationTo   = document.getElementById('acceleration_to')?.value.trim();
+  const powerFrom = document.getElementById('power_from')?.value.trim();
+  const powerTo   = document.getElementById('power_to')?.value.trim();
   const selectedBrand = get('brand');
   const selectedModel = get('model');
 
   const filtered = allCars.filter(car => {
     if (get('body_type') && car.body_type?.toLowerCase() !== get('body_type')) return false;
     if (selectedBrand && selectedBrand !== 'усі' && car.brand?.toLowerCase() !== selectedBrand) return false;
-    if (
-      selectedBrand &&
-      selectedModel &&
-      selectedModel !== 'усі моделі' &&
-      car.model?.toLowerCase() !== selectedModel
-    ) return false;
+    if (selectedBrand && selectedModel && selectedModel !== 'усі моделі' && car.model?.toLowerCase() !== selectedModel) return false;
     if (yearFrom && Number(car.year) < Number(yearFrom)) return false;
     if (yearTo && Number(car.year) > Number(yearTo)) return false;
-    if (get('price') && car.price > Number(get('price'))) return false;
+    if (priceFrom && Number(car.price) < Number(priceFrom)) return false;
+    if (priceTo && Number(car.price) > Number(priceTo)) return false;
     if (get('fuel_type') && car.fuel_type?.toLowerCase() !== get('fuel_type')) return false;
     if (get('transmission') && car.transmission?.toLowerCase() !== get('transmission')) return false;
     if (get('drive_type') && car.drive_type?.toLowerCase() !== get('drive_type')) return false;
     if (get('color') && !car.color?.toLowerCase().includes(get('color'))) return false;
-    if (get('acceleration') && car.acceleration > Number(get('acceleration'))) return false;
-    if (get('max_speed') && car.max_speed > Number(get('max_speed'))) return false;
-    if (get('power') && !car.power?.toString().includes(get('power'))) return false;
+    if (accelerationFrom && Number(car.acceleration) < Number(accelerationFrom)) return false;
+    if (accelerationTo && Number(car.acceleration) > Number(accelerationTo)) return false;
+    if (powerFrom && Number(car.power) < Number(powerFrom)) return false;
+    if (powerTo && Number(car.power) > Number(powerTo)) return false;
     return true;
   });
 
   renderCars(filtered);
 }
+
 
 // ---------------------------------------------
 // 7) Динамічне заповнення селектів «Марка» і «Модель»
@@ -232,26 +237,33 @@ function initDynamicFilters() {
   const modelSelect = document.getElementById('model');
   const bodyTypeSelect = document.getElementById('body_type');
 
-  // Збираємо унікальні бренди та типи кузова
+  // Збираємо унікальні бренди та типи кузова з allCars
   const brands = [...new Set(allCars.map(c => c.brand).filter(Boolean))];
   const bodyTypes = [...new Set(allCars.map(c => c.body_type).filter(Boolean))];
 
-  // Заповнюємо селект «Марка» та «Тип кузова»
+  // Заповнюємо селекти "Марка" та "Тип кузова"
   populateSelect(brandSelect, brands, 'Усі');
   populateSelect(bodyTypeSelect, bodyTypes, 'Усі');
 
-  // При зміні марки — оновлюємо «Модель»
+  // Спочатку — усі моделі
+  modelSelect.disabled = false;
+  populateSelect(modelSelect, [...new Set(allCars.map(c => c.model).filter(Boolean))], 'Усі моделі');
+
+  // При зміні марки — оновлюємо список моделей
   brandSelect.addEventListener('change', () => {
     const selectedBrand = brandSelect.value;
-    if (!selectedBrand) {
-      modelSelect.disabled = true;
-      modelSelect.innerHTML = '<option>Усі моделі</option>';
+
+    if (!selectedBrand || selectedBrand === 'Усі') {
+      modelSelect.disabled = false;
+      const allModels = [...new Set(allCars.map(c => c.model).filter(Boolean))];
+      populateSelect(modelSelect, allModels, 'Усі моделі');
       return;
     }
+
     const models = [
       ...new Set(
         allCars
-          .filter(c => c.brand === selectedBrand)
+          .filter(c => c.brand?.toLowerCase() === selectedBrand.toLowerCase())
           .map(c => c.model)
           .filter(Boolean)
       )
@@ -260,6 +272,7 @@ function initDynamicFilters() {
     populateSelect(modelSelect, models, 'Усі моделі');
   });
 }
+
 
 // ---------------------------------------------
 // 8) Показати верхнє повідомлення про потрібну авторизацію
@@ -292,6 +305,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     el.addEventListener('change', applyFilters);
     el.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
+        e.preventDefault();       // <== Додаємо це!
         applyFilters();
       }
     });

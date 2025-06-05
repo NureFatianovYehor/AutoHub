@@ -36,7 +36,7 @@
     <aside class="sidebar">
       <h3>Фільтр</h3>
 
-      <label>Тип кузова</label>
+      <label for="body_type">Тип кузова</label>
       <select id="body_type">
         <option value="">Усі</option>
       </select>
@@ -44,10 +44,6 @@
       <label for="brand">Марка</label>
       <select id="brand">
         <option value="">Усі</option>
-        <option value="Ford">Ford</option>
-        <option value="BMW">BMW</option>
-        <option value="Audi">Audi</option>
-        <option value="Tesla">Tesla</option>
       </select>
 
       <label for="model">Модель</label>
@@ -61,45 +57,52 @@
         <input type="number" id="year_to" placeholder="до" />
       </div>
       
-
-      <label for="price">Ціна до $</label>
-      <input type="number" id="price" placeholder="до 50000" />
+      <label>Ціна (від - до)</label>
+      <div style="display: flex; gap: 8px;">
+        <input type="number" id="price_from" placeholder="від" />
+        <input type="number" id="price_to" placeholder="до" />
+      </div>
+      
 
       <label for="fuel_type">Тип палива</label>
       <select id="fuel_type">
         <option value="">Усі</option>
-        <option value="бензин">Бензин</option>
-        <option value="дизель">Дизель</option>
-        <option value="електро">Електро</option>
-        <option value="гібрид">Гібрид</option>
+        <option value="gasoline">Бензин</option>
+        <option value="petrol">Дизель</option>
+        <option value="electric">Електро</option>
+        <option value="hybrid">Гібрид</option>
       </select>
 
       <label for="transmission">Трансмісія</label>
       <select id="transmission">
         <option value="">Усі</option>
-        <option value="механіка">Механіка</option>
-        <option value="автомат">Автомат</option>
+        <option value="manual">Механіка</option>
+        <option value="automatic">Автомат</option>
       </select>
 
       <label for="drive_type">Привід</label>
       <select id="drive_type">
         <option value="">Усі</option>
-        <option value="передній">Передній</option>
-        <option value="задній">Задній</option>
-        <option value="повний">Повний</option>
+        <option value="awd">Передній</option>
+        <option value="rwd">Задній</option>
+        <option value="fwd">Повний</option>
       </select>
 
-      <label for="color">Колір</label>
-      <input type="text" id="color" placeholder="чорний, білий…" />
 
       <label for="acceleration">Прискорення до 100 км/год (сек)</label>
-      <input type="number" id="acceleration" step="0.1" placeholder="наприклад, 5.0" />
-
-      <label for="max_speed">Макс. швидкість (км/год)</label>
-      <input type="number" id="max_speed" placeholder="наприклад, 250" />
+      <div style="display: flex; gap: 8px;">
+        <input type="number" step="0.1" id="acceleration_from" placeholder="Прискорення від (сек)" />
+        <input type="number" step="0.1" id="acceleration_to" placeholder="до" />
+      </div>
+      
+    
 
       <label for="power">Потужність (к.с.)</label>
-      <input type="text" id="power" placeholder="наприклад, 200" />
+      <div style="display: flex; gap: 8px;">
+        <input type="number" id="power_from" placeholder="Потужність від (к.с.)" />
+        <input type="number" id="power_to" placeholder="до" />
+      </div>
+      
 
       <button class="filter-button" onclick="applyFilters()">🔍 Пошук</button>
     </aside>
