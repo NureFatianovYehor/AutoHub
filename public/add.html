@@ -4,29 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AutoHub – Додати авто</title>
-  <!-- Підключаємо основний стиль (style.css) та додатковий для форми (add.css) -->
+  <!-- Підключаємо ваші CSS-файли -->
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="add.css" />
 </head>
 <body>
-  <!-- Темна шапка (скопійована з index.html) -->
+  <!-- ==================== HEADER (тот же, что на главной) ==================== -->
   <header class="header">
     <div class="header__container">
       <a href="/" class="header__logo">AutoHub</a>
       <nav class="header__nav">
         <a href="/" class="header__link">Головна</a>
         <a href="/add.html" class="header__link">Додати авто</a>
-        <a href="/contacts.html" class="header__link">Контакти</a>
+        <a href="/favorites.html" class="header__link">Улюблене</a>
+        <a href="#contacts" class="header__link">Контакти</a>
       </nav>
     </div>
   </header>
+  <!-- ==================== /HEADER ==================== -->
 
-  <!-- Сторінка з формою -->
+  <!-- ==================== ФОРМА ДОБАВЛЕННЯ АВТОМОБІЛЯ ==================== -->
   <div class="form-page">
     <div class="form-container">
       <h2>Додати новий автомобіль</h2>
 
-      <!-- Місце для повідомлень про помилку/успіх -->
+      <!-- Блок для повідомлень про помилку або успіх -->
       <div id="form-message" class="form-message" style="display: none;"></div>
 
       <form id="add-car-form">
@@ -41,7 +43,7 @@
           <textarea id="description" name="description" placeholder="Надайте короткий опис автомобіля" required></textarea>
         </div>
 
-        <!-- Марка та Модель у рядку -->
+        <!-- Марка та Модель -->
         <div class="form-row">
           <div class="form-group">
             <label for="brand">Марка:</label>
@@ -53,7 +55,7 @@
           </div>
         </div>
 
-        <!-- Рік та Ціна у рядку -->
+        <!-- Рік та Ціна -->
         <div class="form-row">
           <div class="form-group">
             <label for="year">Рік:</label>
@@ -65,7 +67,7 @@
           </div>
         </div>
 
-        <!-- Пробіг та Тип палива у рядку -->
+        <!-- Пробіг та Тип палива -->
         <div class="form-row">
           <div class="form-group">
             <label for="mileage">Пробіг (км):</label>
@@ -77,90 +79,75 @@
           </div>
         </div>
 
-        <!-- Коробка передач -->
-        <div class="form-group">
-          <label for="transmission">Коробка передач:</label>
-          <input type="text" id="transmission" name="transmission" placeholder="Напр.: автомат, механіка" required />
+        <!-- Коробка передач та Колір -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="transmission">Коробка передач:</label>
+            <input type="text" id="transmission" name="transmission" placeholder="Напр.: автомат, механіка" required />
+          </div>
+          <div class="form-group">
+            <label for="color">Колір:</label>
+            <input type="text" id="color" name="color" placeholder="Напр.: чорний, червоний" />
+          </div>
         </div>
 
-        <!-- Посилання на фото -->
-        <div class="form-group">
-          <label for="images">Посилання на фото (через кому):</label>
-          <input type="text" id="images" name="images" placeholder="https://…jpg,https://…jpg" required />
+        <!-- Тип кузова та Тип приводу -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="body_type">Тип кузова:</label>
+            <input type="text" id="body_type" name="body_type" placeholder="Напр.: Sedan, SUV, Coupe" />
+          </div>
+          <div class="form-group">
+            <label for="drive_type">Тип приводу:</label>
+            <input type="text" id="drive_type" name="drive_type" placeholder="Напр.: RWD, AWD, FWD" />
+          </div>
+        </div>
+
+        <!-- Разгон (Acceleration) и Максимальная скорость -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="acceleration">Час розгону (0-100 км/год, сек.):</label>
+            <input type="number" id="acceleration" name="acceleration" step="0.1" placeholder="Напр.: 7.5" />
+          </div>
+          <div class="form-group">
+            <label for="max_speed">Макс. швидкість (км/год):</label>
+            <input type="number" id="max_speed" name="max_speed" placeholder="Напр.: 240" />
+          </div>
+        </div>
+
+        <!-- Потужність (Power) и Выбор фото -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="power">Потужність (к.с. або кВт):</label>
+            <input type="text" id="power" name="power" placeholder="Напр.: 250 к.с." />
+          </div>
+          <div class="form-group">
+            <label for="imageFile">Фото автомобіля (PNG або JPG):</label>
+            <input type="file" id="imageFile" accept="image/png, image/jpeg" required />
+          </div>
         </div>
 
         <!-- Кнопка відправки -->
         <button type="submit" class="btn-submit">Додати в базу</button>
       </form>
 
-      <!-- Посилання назад на головну (або каталог) -->
+      <!-- Посилання назад -->
       <a href="/" class="back-link">Повернутися на головну</a>
     </div>
   </div>
+  <!-- ==================== /ФОРМА ==================== -->
 
-  <!-- Підключаємо скрипт, який відправлятиме дані форми на бекенд -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('add-car-form');
-      const messageBox = document.getElementById('form-message');
+  <!-- ==================== ПІДКЛЮЧЕННЯ JS ==================== -->
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        messageBox.style.display = 'none';
-        messageBox.textContent = '';
+  <!-- 1) config.js – в ньому window.AUTOHUB_CONFIG.SUPABASE_URL та SUPABASE_KEY -->
+  <script src="config.js"></script>
 
-        // Збираємо дані з форми
-        const title = form.title.value.trim();
-        const description = form.description.value.trim();
-        const brand = form.brand.value.trim();
-        const model = form.model.value.trim();
-        const year = Number(form.year.value);
-        const price = parseFloat(form.price.value);
-        const mileage = parseInt(form.mileage.value, 10);
-        const fuel_type = form.fuel_type.value.trim();
-        const transmission = form.transmission.value.trim();
-        const imagesInput = form.images.value
-          .split(',')
-          .map(url => url.trim())
-          .filter(url => url !== '');
+  <!-- 2) UMD-бандл supabase-js, точно такий же, як на головній -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
 
-        // Простейка валідація (додайте більш сувору, якщо потрібно)
-        if (!title || !description || !brand || !model || isNaN(year) || isNaN(price) || isNaN(mileage) || !fuel_type || !transmission || imagesInput.length === 0) {
-          messageBox.textContent = 'Будь ласка, заповніть усі поля коректно.';
-          messageBox.style.color = '#d32f2f';
-          messageBox.style.display = 'block';
-          return;
-        }
+  <!-- 3) Ваш власний код add.js -->
+  <script src="add.js"></script>
 
-        const carData = { title, description, brand, model, year, price, mileage, fuel_type, transmission, images: imagesInput };
-
-        try {
-          const res = await fetch('/cars', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(carData)
-          });
-
-          const result = await res.json();
-
-          if (!res.ok) {
-            throw new Error(result.error || 'Невідома помилка');
-          }
-
-          // Якщо успішно додано у Supabase, показуємо повідомлення (і чистимо форму)
-          messageBox.textContent = 'Автомобіль успішно додано до бази!';
-          messageBox.style.color = '#2e7d32'; /* зелений для успіху */
-          messageBox.style.display = 'block';
-
-          form.reset();
-        } catch (err) {
-          console.error(err);
-          messageBox.textContent = `Помилка при додаванні: ${err.message}`;
-          messageBox.style.color = '#d32f2f'; /* червоний для помилки */
-          messageBox.style.display = 'block';
-        }
-      });
-    });
-  </script>
+  <!-- ==================== /ПІДКЛЮЧЕННЯ JS ==================== -->
 </body>
 </html>

@@ -1,401 +1,176 @@
-/* ==================== Скидання і базові стилі ==================== */
+/* ==================== Сброс и базовые стили ==================== */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  html, body {
-    height: 100%;
-  }
-  
-  body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f2f2f2; /* світло-графітовий фон загалом */
-    color: #1d1d1f;            /* темний текст для читабельності */
-    line-height: 1.5;
-  }
-  
-  /* ==================== Header (шапка) ==================== */
-  .header {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    background-color: #000000; /* чистий чорний фон */
-    color: #ffffff;
-    z-index: 1000;
-  }
-  
-  .header__container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 20px;
-  }
-  
-  .header__logo {
-    font-size: 1.6rem;
-    font-weight: bold;
-    color: #ffffff;
-    text-decoration: none;
-  }
-  
-  .header__nav {
-    display: flex;
-    gap: 24px;
-  }
-  
-  .header__link {
-    font-size: 0.95rem;
-    color: #ffffff;
-    text-decoration: none;
-    padding: 6px 0;
-    transition: color 0.2s ease;
-  }
-  
-  .header__link:hover {
-    color: #bfbfbf; /* світло-сірий при наведенні */
-  }
-  
-  /* ==================== Hero (банер) ==================== */
-  .hero {
-    position: relative;
-    width: 100%;
-    height: 60vh; /* висота ≈60% від висоти вікна */
-    background-image: url('https://images.unsplash.com/photo-1603787759267-e9d8c5ab878f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwxOTI4NjR8MHwxfGFsbHx8fHx8fHx8&ixlib=rb-1.2.1&q=80&w=1920');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .hero__overlay {
-    position: absolute;
-    inset: 0;                          /* top:0; right:0; bottom:0; left:0; */
-    background-color: rgba(0, 0, 0, 0.4); /* темно-чорний шар з 40% прозорості */
-    z-index: 1;                        /* щоб накладатися поверх фону, але під контентом */
-  }
-  
-  .hero__content {
-    position: relative;
-    z-index: 2;  /* піднятий над overlay, щоб текст і кнопка були зверху */
-    text-align: center;
-    color: #ffffff;
-    max-width: 800px;
-    padding: 0 20px;
-  }
-  
-  .hero__title {
-    font-size: 2.8rem;
-    font-weight: 300;
-    margin-bottom: 12px;
-  }
-  
-  .hero__subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-  }
-  
-  .hero__button {
-    display: inline-block;
-    background-color: #005eaa; /* синьо-графітовий акцент (Mercedes-style) */
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 500;
-    padding: 12px 24px;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
-  }
-  
-  .hero__button:hover {
-    background-color: #004680;
-  }
-  
-  /* ==================== Categories (горизонтальне меню) ==================== */
-  .categories {
-    background-color: #f7f7f7; /* дуже світлий графіт */
-    padding: 16px 0;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  
-  .categories__list {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    list-style: none;
-    overflow-x: auto;   /* лише горизонтальний скрол */
-    overflow-y: hidden; /* прибираємо вертикальний скрол */
-    white-space: nowrap; /* щоб елементи не переносилися на інший рядок */
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-  
-  .categories__item {
-    margin: 0 8px;
-    display: inline-block;
-  }
-  
-  .categories__divider {
-    width: 1px;
-    height: 24px;
-    background-color: #d0d0d0;
-    margin: 0 8px;
-  }
-  
-  .categories__link {
-    font-size: 0.95rem;
-    color: #1d1d1f;
-    text-decoration: none;
-    padding: 6px 12px;
-    border-radius: 20px;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-  
-  .categories__link:hover {
-    background-color: #e0e0e0;
-  }
-  
-  .categories__link.active {
-    background-color: #1d1d1f; /* темний фон для активного пункту */
-    color: #ffffff;
-  }
-  
-  /* ==================== Catalog (основна секція) ==================== */
-  .catalog {
-    padding: 40px 0;
-    background-color: #f2f2f2;
-  }
-  
-  .catalog__container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-  
-  .catalog__title {
-    font-size: 2rem;
-    font-weight: 400;
-    margin-bottom: 24px;
-    color: #1d1d1f;
-  }
-  
-  .no-cars {
-    font-size: 1.1rem;
-    color: #555555;
-    text-align: center;
-    padding: 20px 0;
-  }
-  
-  /* Контейнер карток */
-  .cars-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
-  }
-  
-  /* ==================== Car Card (картка авто) ==================== */
-  .car-card {
-    background-color: #ffffff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .car-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  .car-card__image {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    background-color: #e0e0e0;
-  }
-  
-  .car-card__content {
-    padding: 16px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  .car-card__brand-model {
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 4px;
-    color: #1d1d1f;
-  }
-  
-  .car-card__title {
-    font-size: 0.9rem;
-    color: #555555;
-    margin-bottom: 12px;
-  }
-  
-  .car-card__price {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #005eaa;
-  }
-  
-  .car-card__footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 12px;
-  }
-  
-  .car-card__button {
-    background-color: transparent;
-    border: 1px solid #005eaa;
-    color: #005eaa;
-    font-size: 0.9rem;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-  
-  .car-card__button:hover {
-    background-color: #005eaa;
-    color: #ffffff;
-  }
-  
-  /* ==================== Add Car Form Styles ==================== */
-  /* Обгортка контенту (щоб відцентрувати і задати фон форми) */
-  .form-page {
-    background-color: #f2f2f2; /* світлий фон сторінки */
-    min-height: calc(100vh - 60px); /* відняли висоту header (~60px) */
-    padding: 40px 0;
-  }
-  
-  /* Контейнер самої форми */
-  .form-container {
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #ffffff; /* білий фон форми */
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 32px;
-  }
-  
-  /* Заголовок форми */
-  .form-container h2 {
-    font-size: 1.8rem;
-    font-weight: 500;
-    margin-bottom: 24px;
-    color: #1d1d1f;
-  }
-  
-  /* Кожна група label + input/textarea */
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
-  
-  .form-group label {
-    font-size: 0.95rem;
-    margin-bottom: 6px;
-    color: #1d1d1f;
-    font-weight: 500;
-  }
-  
-  .form-group input,
-  .form-group textarea {
-    font-family: inherit;
-    font-size: 0.95rem;
-    padding: 10px 14px;
-    border: 1px solid #d0d0d0;
-    border-radius: 4px;
-    transition: border-color 0.2s ease;
-    color: #1d1d1f;
-    background-color: #fafafa;
-  }
-  
-  .form-group input:focus,
-  .form-group textarea:focus {
-    outline: none;
-    border-color: #005eaa; /* акцентний колір при фокусі */
-    background-color: #fff;
-  }
-  
-  .form-group textarea {
-    resize: vertical;
-    min-height: 80px;
-    max-height: 200px;
-  }
-  
-  /* Рядок з двома полями на одному рівні (наприклад: "Марка" і "Модель") */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f2f2f2; /* светлый фон */
+  color: #1d1d1f;            /* темный текст */
+  line-height: 1.5;
+}
+
+/* ==================== Header (шапка) ==================== */
+.header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+  z-index: 1000;
+}
+
+.header__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+}
+
+.header__logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+}
+
+.header__nav {
+  display: flex;
+  gap: 24px;
+}
+
+.header__link {
+  font-size: 0.95rem;
+  color: #fff;
+  text-decoration: none;
+  padding: 6px 0;
+  transition: color 0.2s ease;
+}
+
+.header__link:hover {
+  color: #bfbfbf;
+}
+
+/* ==================== Add Car Form Styles ==================== */
+.form-page {
+  background-color: #f2f2f2;
+  min-height: calc(100vh - 60px);
+  padding: 40px 0;
+}
+
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+}
+
+.form-container h2 {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 24px;
+  color: #1d1d1f;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  color: #1d1d1f;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 10px 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  transition: border-color 0.2s ease;
+  color: #1d1d1f;
+  background-color: #fafafa;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #005eaa;
+  background-color: #fff;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+  max-height: 200px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-message {
+  font-size: 0.9rem;
+  color: #d32f2f; /* по умолчанию красный (ошибка) */
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.btn-submit {
+  display: inline-block;
+  background-color: #005eaa;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 8px;
+}
+
+.btn-submit:hover {
+  background-color: #004680;
+}
+
+.back-link {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.9rem;
+  color: #555;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: #1d1d1f;
+}
+
+@media (max-width: 600px) {
   .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
-  
-  /* Стилі для порожнього повідомлення про помилку/успіх */
-  .form-message {
-    font-size: 0.9rem;
-    color: #d32f2f; /* червоний для помилки за замовчуванням */
-    margin-bottom: 16px;
-    text-align: center;
-  }
-  
-  /* Кнопка відправки */
-  .btn-submit {
-    display: inline-block;
-    background-color: #005eaa;
-    color: #ffffff;
-    text-decoration: none;
-    border: none;
-    font-size: 1rem;
-    font-weight: 500;
-    padding: 12px 24px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    margin-top: 8px;
-  }
-  
-  .btn-submit:hover {
-    background-color: #004680;
-  }
-  
-  /* Текст-посилання під кнопкою (наприклад, "Повернутися на головну") */
-  .back-link {
-    display: block;
-    text-align: center;
-    margin-top: 16px;
-    font-size: 0.9rem;
-    color: #555555;
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-  
-  .back-link:hover {
-    color: #1d1d1f;
-  }
-  
-  /* Для мобільних екранів: всі поля по одному */
-  @media (max-width: 600px) {
-    .form-row {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-    .car-card__image {
-      height: 140px;
-    }
-  }
-  
+}

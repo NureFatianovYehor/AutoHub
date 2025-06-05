@@ -10,46 +10,85 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Не найден AUTOHUB_CONFIG с SUPABASE_URL / SUPABASE_KEY.');
     return;
   }
-  
 
   function filterByBodyType(bodyType) {
     fetch('/cars')
       .then(res => res.json())
       .then(result => {
         const cars = Array.isArray(result) ? result : result.data;
-  
+
         const filtered = bodyType
           ? cars.filter(car => car.body_type?.toLowerCase() === bodyType.toLowerCase())
           : cars;
-  
+
         renderCars(filtered);
       })
       .catch(err => {
         console.error('Помилка при завантаженні авто:', err);
       });
   }
-  
+
   document.querySelectorAll('.categories__link').forEach(link => {
     link.addEventListener('click', event => {
       event.preventDefault();
-  
+
       document.querySelectorAll('.categories__link').forEach(l => l.classList.remove('active'));
       link.classList.add('active');
-  
+
       selectedBodyType = link.dataset.body || ''; // оновлюємо глобальну змінну
-  
+
       // Викликаємо завантаження заново (тільки для index.html)
       if (typeof loadCars === 'function') {
         loadCars();
       }
     });
   });
-  
-  
-
 
   // 2) Инициализируем клиента Supabase (UMD-бандл supabase.js должен быть уже подключён)
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ---------------------------------------------
+  // БЛОК: скрыть/показать ссылку "Додати авто" для админов
+  // ---------------------------------------------
+  const addCarLink = document.getElementById('add-car-link');
+  if (addCarLink) {
+    addCarLink.style.display = 'none';
+  }
+
+  (async () => {
+    try {
+      const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+      if (userError || !user) {
+        // Юзер не залогинен или ошибка — ссылка остаётся скрытой
+        return;
+      }
+
+      // Получаем роль пользователя из таблицы profiles
+      const { data: profileData, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+      if (profileError || !profileData) {
+        // Ошибка или профиль не найден — ссылка остаётся скрытой
+        console.error('Не вдалося отримати профіль користувача:', profileError?.message);
+        return;
+      }
+
+      // Если роль "admin", показываем ссылку
+      if (profileData.role === 'admin' && addCarLink) {
+        addCarLink.style.display = 'inline-block';
+      }
+      // Иначе — остаётся скрытой
+    } catch (err) {
+      console.error('Помилка при визначенні ролі:', err.message);
+      // При ошибке оставляем ссылку скрытой
+    }
+  })();
+  // ---------------------------------------------
+  // Конец блока скрыть/показать ссылку "Додати авто"
+  // ---------------------------------------------
 
   // 3) Загружаем машины в каталог (эта функция осталась без изменений)
   loadCars();
@@ -59,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadCars() {
     const container = document.getElementById('cars-container');
     if (!container) return;
-  
+
     try {
       // 1) Получаем тек. пользователя (если есть)
       let currentUser = null;
@@ -69,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (e) {
         console.warn('Не удалось получить пользователя:', e);
       }
-  
+
       // 2) Если пользователь авторизован, получаем его избранное
       let userFavoritesSet = new Set();
       if (currentUser) {
@@ -83,37 +122,36 @@ document.addEventListener('DOMContentLoaded', () => {
           favRows.forEach(row => userFavoritesSet.add(row.car_id));
         }
       }
-  
+
       // 3) Запрашиваем все машины
       const { data: cars, error: carsError } = await supabaseClient
         .from('cars')
         .select('*');
-  
+
       if (carsError) throw carsError;
-  
+
       if (!Array.isArray(cars) || cars.length === 0) {
         container.innerHTML = '<p class="no-cars">В базі поки немає автомобілів.</p>';
         return;
       }
-  
+
       // ✅ 4) Фільтрація по типу кузова
       const filteredCars = selectedBodyType
         ? cars.filter(car => car.body_type?.toLowerCase() === selectedBodyType)
         : cars;
-  
+
       // 5) Очищаем контейнер и добавляем карточки
       container.innerHTML = '';
       filteredCars.forEach(car => {
         const card = createCarCard(car, userFavoritesSet);
         container.appendChild(card);
       });
-  
+
     } catch (err) {
       console.error('Ошибка loadCars():', err);
       container.innerHTML = `<p class="error">Не вдалося завантажити дані: ${err.message}</p>`;
     }
   }
-  
 
 
   /* ФУНКЦИЯ 2: Создаёт одну карточку машины (с «сердечком») */
@@ -171,7 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
     button.textContent = 'Детальніше';
     button.href = `detail.html?id=${car.id}`;
     footer.appendChild(button);
-    
 
     content.appendChild(footer);
     card.appendChild(content);
