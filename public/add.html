@@ -4,18 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AutoHub – Додати авто</title>
-  <!-- Підключаємо ваші CSS-файли -->
+
+  <!-- 1) Подключаем общие стили (header, footer, базовые стили) -->
   <link rel="stylesheet" href="style.css" />
+  <!-- 2) Специальные стили только для страницы «Добавить авто» -->
   <link rel="stylesheet" href="add.css" />
 </head>
-<body>
-  <!-- ==================== HEADER (тот же, что на главной) ==================== -->
+<body class="page-container">
+  <!-- ==================== HEADER ==================== -->
   <header class="header">
     <div class="header__container">
       <a href="/" class="header__logo">AutoHub</a>
+      <!-- common.js запишет сюда “Привіт, Ім’я!” или кнопки “Увійти/Зареєструватися” -->
+      <div id="user-name" class="header__user"></div>
       <nav class="header__nav">
         <a href="/" class="header__link">Головна</a>
-        <a href="/add.html" class="header__link">Додати авто</a>
+        <a href="/add.html" class="header__link" id="add-car-link">Додати авто</a>
         <a href="/favorites.html" class="header__link">Улюблене</a>
         <a href="#contacts" class="header__link">Контакти</a>
       </nav>
@@ -23,8 +27,9 @@
   </header>
   <!-- ==================== /HEADER ==================== -->
 
-  <!-- ==================== ФОРМА ДОБАВЛЕННЯ АВТОМОБІЛЯ ==================== -->
-  <div class="form-page">
+  <!-- ==================== ОСНОВНОЙ КОНТЕНТ (ФОРМА) ==================== -->
+  <!-- <main> задаёт flex:1 и «растягивает» страницу между header и footer -->
+  <main class="form-page">
     <div class="form-container">
       <h2>Додати новий автомобіль</h2>
 
@@ -32,7 +37,7 @@
       <div id="form-message" class="form-message" style="display: none;"></div>
 
       <form id="add-car-form">
-        <!-- Назва та Опис -->
+        <!-- Здесь ваши form-group, form-row и т. д. (как раньше) -->
         <div class="form-group">
           <label for="title">Назва (коротко):</label>
           <input type="text" id="title" name="title" placeholder="Напр.: BMW 320i" required />
@@ -127,27 +132,67 @@
           </div>
         </div>
 
-        <!-- Кнопка відправки -->
+        <!-- Кнопка відправки (центрується через CSS) -->
         <button type="submit" class="btn-submit">Додати в базу</button>
       </form>
 
       <!-- Посилання назад -->
       <a href="/" class="back-link">Повернутися на головну</a>
     </div>
-  </div>
-  <!-- ==================== /ФОРМА ==================== -->
+  </main>
+  <!-- ==================== /ОСНОВНОЙ КОНТЕНТ ==================== -->
 
-  <!-- ==================== ПІДКЛЮЧЕННЯ JS ==================== -->
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer" id="contacts">
+    <div class="footer__back-to-top">
+      <a href="#top">Наверх ↑</a>
+    </div>
 
-  <!-- 1) config.js – в ньому window.AUTOHUB_CONFIG.SUPABASE_URL та SUPABASE_KEY -->
+    <div class="footer__columns">
+      <div class="footer__column">
+        <h3 class="footer__title">Покупка</h3>
+        <a href="/cars" class="footer__link">Авто в наявності</a>
+        <a href="/configurator" class="footer__link">Конфігуратор</a>
+        <a href="/accessories" class="footer__link">Аксесуари</a>
+        <a href="/favorites.html" class="footer__link">Улюблене</a>
+      </div>
+      <div class="footer__column">
+        <h3 class="footer__title">Сервіс</h3>
+        <a href="/service" class="footer__link">Техобслуговування</a>
+        <a href="/warranty" class="footer__link">Гарантія</a>
+        <a href="/spare-parts" class="footer__link">Запчастини</a>
+      </div>
+      <div class="footer__column">
+        <h3 class="footer__title">Компанія</h3>
+        <a href="/about" class="footer__link">Про нас</a>
+        <a href="#contacts" class="footer__link">Контакти</a>
+        <a href="/careers" class="footer__link">Вакансії</a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="footer__bottom-links">
+        <a href="/privacy-policy" class="footer__bottom-link">Політика конфіденційності</a>
+        <a href="/terms" class="footer__bottom-link">Умови використання</a>
+        <a href="/feedback" class="footer__bottom-link">Зворотній зв'язок</a>
+      </div>
+      <div class="footer__contact">
+        <span class="footer__contact-item">📧 autohub74@gmail.com</span>
+        <span class="footer__contact-item">📞 +38 095 860 15 88</span>
+      </div>
+    </div>
+  </footer>
+  <!-- ==================== /FOOTER ==================== -->
+
+
+  <!-- ==================== ПОДКЛЮЧЕНИЕ JS ==================== -->
+  <!-- 1) config.js – здесь задаются AUTOHUB_CONFIG.SUPABASE_URL / SUPABASE_KEY -->
   <script src="config.js"></script>
-
-  <!-- 2) UMD-бандл supabase-js, точно такий же, як на головній -->
+  <!-- 2) UMD-бандл supabase-js -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
-
-  <!-- 3) Ваш власний код add.js -->
+  <!-- 3) common.js – добавляет “Привіт, Ім’я!” или «Увійти» в #user-name, прячет/показывает add-car-link -->
+  <script src="common.js"></script>
+  <!-- 4) add.js – ваша логика отправки формы -->
   <script src="add.js"></script>
-
-  <!-- ==================== /ПІДКЛЮЧЕННЯ JS ==================== -->
 </body>
 </html>

@@ -1,68 +1,7 @@
-/* ==================== Сброс и базовые стили ==================== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  height: 100%;
-}
-
-body {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f2f2f2; /* светлый фон */
-  color: #1d1d1f;            /* темный текст */
-  line-height: 1.5;
-}
-
-/* ==================== Header (шапка) ==================== */
-.header {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background-color: #000;
-  color: #fff;
-  z-index: 1000;
-}
-
-.header__container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 20px;
-}
-
-.header__logo {
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #fff;
-  text-decoration: none;
-}
-
-.header__nav {
-  display: flex;
-  gap: 24px;
-}
-
-.header__link {
-  font-size: 0.95rem;
-  color: #fff;
-  text-decoration: none;
-  padding: 6px 0;
-  transition: color 0.2s ease;
-}
-
-.header__link:hover {
-  color: #bfbfbf;
-}
-
 /* ==================== Add Car Form Styles ==================== */
 .form-page {
   background-color: #f2f2f2;
-  min-height: calc(100vh - 60px);
+  /* min-height можно не указывать, т.к. main уже растягивается flex:1 */
   padding: 40px 0;
 }
 
@@ -134,9 +73,10 @@ body {
   text-align: center;
 }
 
+/* === Кнопка «Додати в базу» по центру === */
 .btn-submit {
   display: block;         /* вместо inline-block */
-  margin: 8px auto 0;     /* 8px сверху, автоматически по центру слева-справа */
+  margin: 8px auto 0;     /* 8px сверху, авто слева-справа */
   background-color: #005eaa;
   color: #fff;
   text-decoration: none;
