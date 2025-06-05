@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Деталі автомобіля | AutoHub</title>
 
-  <!-- 1) Підключаємо загальні стилі (header/footer, базові стилі, картки тощо) -->
+  <!-- 1) Общие стили проекта (header, footer и т.п.) -->
   <link rel="stylesheet" href="style.css" />
-
-  <!-- 2) Якщо у вас є спеціальний файл стилів лише для detail-сторінки, підключіть його тут -->
+  <!-- 2) Специальные стили только для этой страницы -->
   <link rel="stylesheet" href="detail.css" />
 </head>
 <body class="page-container">
@@ -17,7 +16,7 @@
   <header class="header">
     <div class="header__container">
       <a href="/" class="header__logo">AutoHub</a>
-      <!-- Сюди common.js запише “Привіт, Ім’я!” або кнопки “Увійти/Зареєструватися” -->
+      <!-- common.js подставит сюда “Привіт, Ім’я!” или «Увійти/Зареєструватися» -->
       <div id="user-name" class="header__user"></div>
 
       <nav class="header__nav">
@@ -30,29 +29,23 @@
   </header>
   <!-- ==================== /HEADER ==================== -->
 
-
   <!-- ==================== ГОЛОВНИЙ КОНТЕНТ ==================== -->
   <main class="catalog">
     <div class="catalog__container">
-      <!-- Назва розділу -->
       <h2 class="catalog__title">Деталі автомобіля</h2>
-
-      <!-- Сюди через JavaScript вставимо всю інформацію про одну машину -->
       <div id="car-detail-container" class="car-detail-container">
-        <!-- Тимчасово виводимо loading, доки чекаємо дані з Supabase -->
+        <!-- Пока ждём данные -->
         <p class="loading">Завантаження... Будь ласка, зачекайте.</p>
       </div>
     </div>
   </main>
   <!-- ==================== /ГОЛОВНИЙ КОНТЕНТ ==================== -->
 
-
   <!-- ==================== FOOTER ==================== -->
   <footer class="footer" id="contacts">
     <div class="footer__back-to-top">
       <a href="#top">Наверх ↑</a>
     </div>
-
     <div class="footer__columns">
       <div class="footer__column">
         <h3 class="footer__title">Покупка</h3>
@@ -74,7 +67,6 @@
         <a href="/careers" class="footer__link">Вакансії</a>
       </div>
     </div>
-
     <div class="footer__bottom">
       <div class="footer__bottom-links">
         <a href="/privacy-policy" class="footer__bottom-link">Політика конфіденційності</a>
@@ -89,15 +81,23 @@
   </footer>
   <!-- ==================== /FOOTER ==================== -->
 
-
-  <!-- ==================== ПІДКЛЮЧАЄМО JS ==================== -->
-  <!-- 1) Спочатку – config.js: тут визначаються AUTOHUB_CONFIG з вашим SUPABASE_URL і SUPABASE_KEY -->
+  <!-- ==================== Подключаем JS ==================== -->
+  <!-- 1) config.js — здесь задаются SUPABASE_URL и SUPABASE_KEY -->
   <script src="config.js"></script>
-  <!-- 2) Підключаємо UMD-бандл supabase.js -->
+  <!-- 2) Supabase UMD-бандл (supabase-js) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
-  <!-- 3) Підключаємо загальний файл common.js, який робить header “Привіт, Ім’я!”/“Увійти” -->
+  <!-- 3) common.js — логика header (“Привіт, Ім’я!”/“Увійти”) и скрытие add-car-link -->
   <script src="common.js"></script>
-  <!-- 4) Підключаємо script для detail‐сторінки -->
+
+  <!-- 4) EmailJS SDK — появляется глобальный объект emailjs() -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    // 4.1) Здесь вставьте свой Public Key (User ID) из EmailJS → Account → API Keys
+    // Вы предоставили скрин: Public Key = "kd530yALMMejmOceW"
+    emailjs.init("kd530yALMMejmOceW");
+  </script>
+
+  <!-- 5) detail.js — логика рендера деталей и отправки письма -->
   <script src="detail.js"></script>
 </body>
 </html>
