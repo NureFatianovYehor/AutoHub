@@ -135,7 +135,8 @@ body {
 }
 
 .btn-submit {
-  display: inline-block;
+  display: block;         /* вместо inline-block */
+  margin: 8px auto 0;     /* 8px сверху, автоматически по центру слева-справа */
   background-color: #005eaa;
   color: #fff;
   text-decoration: none;
@@ -146,7 +147,6 @@ body {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  margin-top: 8px;
 }
 
 .btn-submit:hover {

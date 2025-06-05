@@ -8,35 +8,65 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  
+
+    // ---------------------------------------------
+    // БЛОК: приховати/показати посилання «Додати авто» для адміна
+    // ---------------------------------------------
+    const addCarLink = document.getElementById('add-car-link');
+    if (addCarLink) {
+      addCarLink.style.display = 'none';
+    }
+    (async () => {
+      try {
+        const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+        if (userError || !user) {
+          return;
+        }
+        const { data: profileData, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+        if (profileError || !profileData) {
+          return;
+        }
+        if (profileData.role === 'admin' && addCarLink) {
+          addCarLink.style.display = 'inline-block';
+        }
+      } catch {
+        // у разі помилки нічого не робимо, посилання залишиться прихованим
+      }
+    })();
+    // ---------------------------------------------
+
     // 2) Парсимо id із query string: detail.html?id=<car_id>
     const params = new URLSearchParams(window.location.search);
     const carId = params.get('id');
     const container = document.getElementById('car-detail-container');
-  
+
     if (!carId) {
       container.innerHTML = '<p class="error">Невірний запит: не вказано ідентифікатор машини.</p>';
       return;
     }
-  
+
     // 3) Функція, яка завантажує одну машину за id і рендерить її
     async function loadCarById(id) {
       // 3.1) Виводимо повідомлення “Завантаження…”
       container.innerHTML = '<p class="loading">Завантаження... Будь ласка, зачекайте.</p>';
-  
+
       try {
         const { data: car, error: carError } = await supabaseClient
           .from('cars')
           .select('*')
           .eq('id', id)
           .single();
-  
+
         if (carError || !car) {
           container.innerHTML = `<p class="error">Не вдалося знайти машину з таким ідентифікатором.</p>`;
           console.error(carError);
           return;
         }
-  
+
         // 3.2) Рендеримо отримані дані
         renderCarDetail(car);
       } catch (e) {
@@ -44,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error(e);
       }
     }
-  
+
     // 4) Допоміжна: отримуємо першу картинку (як у вас зберігаються масиви/рядки)
     function getFirstImage(images) {
       if (!images) return 'no-image.jpg';
@@ -67,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       return 'no-image.jpg';
     }
-  
+
     // 5) Рендеримо детальну інформацію
     async function renderCarDetail(car) {
       // 5.1) Перевіримо, чи користувач уже додав цю машину в улюблені
@@ -88,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (e) {
         console.warn('Не вдалося перевірити favorites:', e);
       }
-  
+
       // 5.2) Формуємо HTML
       // Для простоти використовуємо шаблонні рядки
       const html = `
@@ -99,22 +129,22 @@ document.addEventListener('DOMContentLoaded', () => {
             alt="${car.brand || ''} ${car.model || ''}" 
             class="car-detail-image" 
           />
-  
+
           <!-- Сердечко -->
           <span class="car-detail-favorite ${isFavorite ? 'active' : ''}" data-car-id="${car.id}"></span>
-  
+
           <!-- Основний текстовий блок -->
           <div class="car-detail-content">
             <!-- Назва (Brand + Model + Year) -->
             <div class="car-detail-header">
               <h3 class="car-detail-title">${car.brand || '-'} ${car.model || '-'} (${car.year || '-'})</h3>
             </div>
-  
+
             <!-- Опис (description) -->
             <div class="car-detail-description">
               ${car.description || 'Опис недоступний.'}
             </div>
-  
+
             <!-- Технічні дані -->
             <div class="car-detail-specs">
               <div class="car-detail-spec">
@@ -158,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span>${car.power != null ? car.power + ' к.с.' : '—'}</span>
               </div>
             </div>
-  
+
             <!-- Кнопка Купити -->
             <div class="car-detail-actions">
               <span class="car-detail-price">$${Number(car.price || 0).toLocaleString()}</span>
@@ -169,9 +199,9 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       `;
-  
+
       container.innerHTML = html;
-  
+
       // 5.3) Після того, як вставили HTML, “підв’язуємо” поведінку для “сердечка”
       const heartEl = container.querySelector('.car-detail-favorite');
       heartEl.addEventListener('click', async () => {
@@ -183,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
         const carIdNow = heartEl.dataset.carId;
-  
+
         // 5.3.2) Якщо “сердечко” активне — видаляємо з favorites, інакше додаємо
         if (heartEl.classList.contains('active')) {
           // Видалення
@@ -191,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .from('favorites')
             .delete()
             .match({ user_id: user.id, car_id: carIdNow });
-  
+
           if (delErr) {
             console.error('Помилка видалення з улюбленого: ' + delErr.message);
             return;
@@ -202,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const { error: insErr } = await supabaseClient
             .from('favorites')
             .insert({ user_id: user.id, car_id: carIdNow });
-  
+
           if (insErr) {
             console.error('Помилка додавання в улюблене: ' + insErr.message);
             return;
@@ -211,8 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
-  
+
     // 6) Запускаємо завантаження
     loadCarById(carId);
   });
-  

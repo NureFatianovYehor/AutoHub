@@ -11,6 +11,36 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ---------------------------------------------
+// БЛОК: приховати/показати посилання «Додати авто» для адміна
+// ---------------------------------------------
+const addCarLink = document.getElementById('add-car-link');
+if (addCarLink) {
+  addCarLink.style.display = 'none';
+}
+(async () => {
+  try {
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    if (userError || !user) {
+      return;
+    }
+    const { data: profileData, error: profileError } = await supabaseClient
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+    if (profileError || !profileData) {
+      return;
+    }
+    if (profileData.role === 'admin' && addCarLink) {
+      addCarLink.style.display = 'inline-block';
+    }
+  } catch {
+    // у разі помилки нічого не робимо, посилання залишиться прихованим
+  }
+})();
+// ---------------------------------------------
+
+// ---------------------------------------------
 // 1) Масив для збереження всіх авто після завантаження
 // ---------------------------------------------
 let allCars = [];
@@ -170,8 +200,6 @@ async function renderCars(cars) {
 
     content.appendChild(heart);
 
-        // …попередня частина renderCars…
-
     // 5.8) Блок із ціною та кнопкою «Детальніше», вирівняний у рядок
     const footer = document.createElement('div');
     footer.className = 'car-card__footer';
@@ -263,34 +291,33 @@ function initDynamicFilters() {
   const brands = [...new Set(allCars.map(c => c.brand).filter(Boolean))];
   const bodyTypes = [...new Set(allCars.map(c => c.body_type).filter(Boolean))];
 
-    // Заповнюємо селект «Марка» та «Тип кузова»
-    populateSelect(brandSelect, brands, 'Усі');
-    populateSelect(bodyTypeSelect, bodyTypes, 'Усі');
-  
-    // 🔒 Заблокуємо селект моделі, поки марка не вибрана
-    modelSelect.disabled = true;
-    modelSelect.innerHTML = '<option value="">Спочатку оберіть марку</option>';
-  
-    // При зміні марки — оновлюємо «Модель»
-    brandSelect.addEventListener('change', () => {
-      const selectedBrand = brandSelect.value;
-      if (!selectedBrand || selectedBrand === 'Усі') {
-        modelSelect.disabled = true;
-        modelSelect.innerHTML = '<option value="">Спочатку оберіть марку</option>';
-        return;
-      }
-      const models = [
-        ...new Set(
-          allCars
-            .filter(c => c.brand === selectedBrand)
-            .map(c => c.model)
-            .filter(Boolean)
-        )
-      ];
-      modelSelect.disabled = false;
-      populateSelect(modelSelect, models, 'Усі моделі');
-    });
-  
+  // Заповнюємо селект «Марка» та «Тип кузова»
+  populateSelect(brandSelect, brands, 'Усі');
+  populateSelect(bodyTypeSelect, bodyTypes, 'Усі');
+
+  // 🔒 Заблокуємо селект моделі, поки марка не вибрана
+  modelSelect.disabled = true;
+  modelSelect.innerHTML = '<option value="">Спочатку оберіть марку</option>';
+
+  // При зміні марки — оновлюємо «Модель»
+  brandSelect.addEventListener('change', () => {
+    const selectedBrand = brandSelect.value;
+    if (!selectedBrand || selectedBrand === 'Усі') {
+      modelSelect.disabled = true;
+      modelSelect.innerHTML = '<option value="">Спочатку оберіть марку</option>';
+      return;
+    }
+    const models = [
+      ...new Set(
+        allCars
+          .filter(c => c.brand === selectedBrand)
+          .map(c => c.model)
+          .filter(Boolean)
+      )
+    ];
+    modelSelect.disabled = false;
+    populateSelect(modelSelect, models, 'Усі моделі');
+  });
 }
 
 

@@ -40,12 +40,27 @@ main {
   text-align: center;
 }
 
-/* Сітка карток */
+/* === СИТКА КАРТОК: по умолчанию === */
 .cars-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(312px, 1fr));
   gap: 24px;
 }
+
+/* === Если в контейнере нет ни одной карточки (класса .car-card),
+   а есть только, например, .loading/.no-cars/.error,
+   то переключаемся на флекс-контейнер и центрируем содержимое === */
+.cars-container:has(.loading):not(:has(.car-card)),
+.cars-container:has(.no-cars):not(:has(.car-card)),
+.cars-container:has(.error):not(:has(.car-card)) {
+  display: flex;
+  justify-content: center;  /* по горизонтали */
+  align-items: center;      /* по вертикали */
+  /* Чтобы сообщение не «уползало» вверх, можно задать высоту или min-height.
+     Например, если вы хотите, чтобы надпись была в середине области 240px: */
+  min-height: 240px;
+}
+
 
 /* ==================== ОДНА КАРТОЧКА (car-card) ==================== */
 .car-card {

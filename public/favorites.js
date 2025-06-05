@@ -8,6 +8,35 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+  // ---------------------------------------------
+  // БЛОК: приховати/показати посилання «Додати авто» для адміна
+  const addCarLink = document.getElementById('add-car-link');
+  if (addCarLink) {
+    addCarLink.style.display = 'none';
+  }
+  (async () => {
+    try {
+      const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+      if (userError || !user) {
+        return;
+      }
+      const { data: profileData, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+      if (profileError || !profileData) {
+        return;
+      }
+      if (profileData.role === 'admin' && addCarLink) {
+        addCarLink.style.display = 'inline-block';
+      }
+    } catch {
+      // у разі помилки нічого не робимо, посилання залишиться прихованим
+    }
+  })();
+  // ---------------------------------------------
+
   // 2) Контейнер для «Улюблених»
   const container = document.getElementById('favorites-container');
   if (!container) return;
