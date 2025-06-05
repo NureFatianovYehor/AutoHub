@@ -241,36 +241,34 @@ function initDynamicFilters() {
   const brands = [...new Set(allCars.map(c => c.brand).filter(Boolean))];
   const bodyTypes = [...new Set(allCars.map(c => c.body_type).filter(Boolean))];
 
-  // Заповнюємо селекти "Марка" та "Тип кузова"
-  populateSelect(brandSelect, brands, 'Усі');
-  populateSelect(bodyTypeSelect, bodyTypes, 'Усі');
-
-  // Спочатку — усі моделі
-  modelSelect.disabled = false;
-  populateSelect(modelSelect, [...new Set(allCars.map(c => c.model).filter(Boolean))], 'Усі моделі');
-
-  // При зміні марки — оновлюємо список моделей
-  brandSelect.addEventListener('change', () => {
-    const selectedBrand = brandSelect.value;
-
-    if (!selectedBrand || selectedBrand === 'Усі') {
+    // Заповнюємо селект «Марка» та «Тип кузова»
+    populateSelect(brandSelect, brands, 'Усі');
+    populateSelect(bodyTypeSelect, bodyTypes, 'Усі');
+  
+    // 🔒 Заблокуємо селект моделі, поки марка не вибрана
+    modelSelect.disabled = true;
+    modelSelect.innerHTML = '<option value="">Спочатку оберіть марку</option>';
+  
+    // При зміні марки — оновлюємо «Модель»
+    brandSelect.addEventListener('change', () => {
+      const selectedBrand = brandSelect.value;
+      if (!selectedBrand || selectedBrand === 'Усі') {
+        modelSelect.disabled = true;
+        modelSelect.innerHTML = '<option value="">Спочатку оберіть марку</option>';
+        return;
+      }
+      const models = [
+        ...new Set(
+          allCars
+            .filter(c => c.brand === selectedBrand)
+            .map(c => c.model)
+            .filter(Boolean)
+        )
+      ];
       modelSelect.disabled = false;
-      const allModels = [...new Set(allCars.map(c => c.model).filter(Boolean))];
-      populateSelect(modelSelect, allModels, 'Усі моделі');
-      return;
-    }
-
-    const models = [
-      ...new Set(
-        allCars
-          .filter(c => c.brand?.toLowerCase() === selectedBrand.toLowerCase())
-          .map(c => c.model)
-          .filter(Boolean)
-      )
-    ];
-    modelSelect.disabled = false;
-    populateSelect(modelSelect, models, 'Усі моделі');
-  });
+      populateSelect(modelSelect, models, 'Усі моделі');
+    });
+  
 }
 
 
