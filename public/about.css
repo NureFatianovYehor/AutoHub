@@ -1,0 +1,204 @@
+/* public/about.css */
+
+/* ==================== Скидання та базові стилі ==================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html, body {
+    height: 100%;
+  }
+  
+  body.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  main {
+    flex: 1;
+  }
+  
+  /* ==================== ABOUT (ГОЛОВНИЙ КОНТЕНТ) ==================== */
+  .about__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+  
+  .about__title {
+    font-size: 2rem;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  
+  /* === Картки команди === */
+  .team-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  
+  .team-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    text-align: center;
+  }
+  
+  .team-card h3 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #1d1d1f;
+  }
+  
+  .team-card p.position {
+    font-size: 1rem;
+    color: #555555;
+    margin-bottom: 16px;
+  }
+  
+  .team-card p.description {
+    font-size: 0.95rem;
+    color: #333333;
+    line-height: 1.5;
+  }
+  
+  /* === Блок із загальною інформацією про компанію === */
+  .company-info {
+    margin-top: 48px;
+    color: #333333;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  .company-info h2 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .company-info p {
+    margin-bottom: 16px;
+  }
+  
+  .company-info ul {
+    margin: 16px 0 24px 20px;
+  }
+  
+  .company-info ul li {
+    margin-bottom: 8px;
+  }
+  
+  /* ==================== Footer (спільні стилі) ==================== */
+  .footer {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  /* Блок «Наверх» */
+  .footer__back-to-top {
+    text-align: center;
+    padding: 8px 0;
+  }
+  
+  .footer__back-to-top a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+  
+  .footer__back-to-top a:hover {
+    color: #bfbfbf;
+  }
+  
+  /* Центрований інформаційний блок «Про нас» (скорочений) */
+  .footer__centered-info {
+    max-width: 800px;
+    margin: 24px auto;
+    text-align: center;
+    padding: 0 16px;
+  }
+  
+  .footer__title-centered {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+  
+  .footer__info-centered {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 12px;
+  }
+  
+  /* Нижня частина футера: посилання + контакти */
+  .footer__bottom {
+    border-top: 1px solid #333;
+    margin-top: 16px;
+    padding: 12px 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .footer__bottom-links {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .footer__bottom-link {
+    color: #999;
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-right: 16px;
+    transition: color 0.2s ease;
+  }
+  
+  .footer__bottom-link:hover {
+    color: #fff;
+  }
+  
+  .footer__contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 4px;
+  }
+  
+  .footer__contact-item {
+    color: #ccc;
+    font-size: 0.85rem;
+  }
+  
+  /* «Липкий» футер */
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .footer {
+    margin-top: auto;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  

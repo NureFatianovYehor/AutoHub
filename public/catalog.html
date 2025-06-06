@@ -4,10 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Каталог авто | AutoHub</title>
-  <!-- Підключаємо зовнішній файл стилів -->
+  <!-- 1) Основний CSS (header, footer, загальні стилі) -->
+  <link rel="stylesheet" href="style.css" />
+  <!-- 2) Спеціальні стилі для сторінки «Каталог» -->
   <link rel="stylesheet" href="catalog.css" />
 </head>
 <body class="page-container">
+  <div id="top"></div>
   <!-- ==================== HEADER ==================== -->
   <header class="header">
     <div class="header__container">
@@ -22,6 +25,7 @@
         <a href="/" class="header__link">Головна</a>
         <a href="/add.html" class="header__link" id="add-car-link">Додати авто</a>
         <a href="/favorites.html" class="header__link">Улюблене</a>
+        <a href="/about.html" class="header__link">Про нас</a>
         <a href="#contacts" class="header__link">Контакти</a>
       </nav>
     </div>
@@ -63,7 +67,6 @@
         <input type="number" id="price_to" placeholder="до" />
       </div>
       
-
       <label for="fuel_type">Тип палива</label>
       <select id="fuel_type">
         <option value="">Усі</option>
@@ -88,21 +91,17 @@
         <option value="fwd">Повний</option>
       </select>
 
-
       <label for="acceleration">Прискорення до 100 км/год (сек)</label>
       <div style="display: flex; gap: 8px;">
         <input type="number" step="0.1" id="acceleration_from" placeholder="Прискорення від (сек)" />
         <input type="number" step="0.1" id="acceleration_to" placeholder="до" />
       </div>
-      
-    
 
       <label for="power">Потужність (к.с.)</label>
       <div style="display: flex; gap: 8px;">
         <input type="number" id="power_from" placeholder="Потужність від (к.с.)" />
         <input type="number" id="power_to" placeholder="до" />
       </div>
-      
 
       <button class="filter-button" onclick="applyFilters()">🔍 Пошук</button>
     </aside>
@@ -118,43 +117,42 @@
   <!-- ==================== /LAYOUT ==================== -->
 
   <!-- ==================== FOOTER ==================== -->
-<footer class="footer" id="contacts">
-  <!-- Блок «Наверх» -->
-  <div class="footer__back-to-top">
-    <a href="#top">Наверх ↑</a>
-  </div>
-
-  <!-- Центрований блок із інформацією «Про нас» (скорочений) -->
-  <div class="footer__centered-info">
-    <h3 class="footer__title-centered">Про нас</h3>
-    <p class="footer__info-centered">
-      AutoHub — онлайн-автосалон, який об’єднує перевірені пропозиції нових авто з усієї Країни. 
-      Ми пропонуємо нові автомобілі, пригнані зі США та інших країн, а також топові моделі від перевірених виробників.
-    </p>
-    
-  </div>
-
-  <!-- Нижня частина футера: посилання «Авто в наявності» + контакти -->
-  <div class="footer__bottom">
-    <div class="footer__bottom-links">
-      <a href="catalog.html" class="footer__bottom-link">Авто в наявності</a>
+  <footer class="footer" id="contacts">
+    <!-- Блок «Наверх» -->
+    <div class="footer__back-to-top">
+      <a href="#top">Наверх ↑</a>
     </div>
-    <div class="footer__contact">
-      <span class="footer__contact-item">📧 autohub74@gmail.com</span>
-      <span class="footer__contact-item">📞 +38 095 860 15 88</span>
+
+    <!-- Центрований блок із інформацією «Ввідна інформація» -->
+    <div class="footer__centered-info">
+      <h3 class="footer__title-centered">Ввідна інформація</h3>
+      <p class="footer__info-centered">
+        AutoHub — онлайн-автосалон, який об’єднує перевірені пропозиції нових авто з усієї Країни. 
+        Ми пропонуємо нові автомобілі, пригнані зі США та інших країн, а також топові моделі від перевірених виробників.
+      </p>
     </div>
-  </div>
-</footer>
-<!-- ==================== /FOOTER ==================== -->
+
+    <!-- Нижня частина футера: посилання «Авто в наявності» + «Повна інформація про нас» + контакти -->
+    <div class="footer__bottom">
+      <div class="footer__bottom-links">
+        <a href="catalog.html" class="footer__bottom-link">Авто в наявності</a>
+        <a href="about.html" class="footer__bottom-link">Повна інформація про нас</a>
+      </div>
+      <div class="footer__contact">
+        <span class="footer__contact-item">📧 autohub74@gmail.com</span>
+        <span class="footer__contact-item">📞 +38 095 860 15 88</span>
+      </div>
+    </div>
+  </footer>
+  <!-- ==================== /FOOTER ==================== -->
 
   <!-- ==================== ПІДКЛЮЧАЄМО JS ==================== -->
   <!-- 1) Переконайтеся, що в корені є ваш config.js із даними AUTOHUB_CONFIG -->
   <script src="config.js"></script>
   <!-- 2) Підключаємо UMD-бандл supabase-js -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
-  <!-- 3) Підключаємо common.js (де викликається showUserNameOrAuthButtons для шапки) -->
   <script src="common.js"></script>
-  <!-- 4) Підключаємо власний код для сторінки каталогу (filter + render) -->
+  <!-- 3) А лише потім – ваш власний script.js -->
   <script src="catalog.js"></script>
 </body>
 </html>
