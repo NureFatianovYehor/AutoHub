@@ -119,17 +119,17 @@ main {
 
 
 /* ==================== Hero (відео-секція) ==================== */
+/* ==================== Hero (відео-секція) ==================== */
 .hero {
-  position: relative;    /* робимо контейнер новим стекінг-контекстом */
-  z-index: 0;            /* обов’язково, щоб діти з негативними z-index залишалися всередині */
+  position: relative;
+  z-index: 0;
   width: 100%;
-  height: 65vh;          /* 65% від висоти вікна браузера */
-  min-height: 400px;     /* мінімальна висота, щоб блок не «згорнувся» до 0 */
+  height: 110vh;       /* Якщо хочете змінювати висоту відео, правте це значення */
+  min-height: 640px;  /* Аналогічно — мінімальна висота */
   overflow: hidden;
-  background-color: #000; /* поки відео вантажиться, бачимо чорний фон */
+  background-color: #000;
 }
 
-/* Відео завжди під всіма іншими шарами всередині .hero */
 .hero__video {
   position: absolute;
   top: 0;
@@ -137,10 +137,9 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 0;   /* ставимо відео на «нульовий» шар, тобто всередині контейнера воно буде найнижчим */
+  z-index: 0;
 }
 
-/* Темна плівка над відео (щоб текст контрастував) */
 .hero__overlay {
   position: absolute;
   top: 0;
@@ -148,18 +147,22 @@ main {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
-  z-index: 1;  /* поверх відео, але під контентом (текстом/кнопкою) */
+  z-index: 1;
 }
 
-/* Текст і кнопка повинні бути над overlay */
+/* ========== Оновлений блок для лівого позиціювання ========== */
 .hero__content {
-  position: relative;
-  z-index: 2;  /* поверх overlay */
-  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 8%;               /* Відступ від лівого краю, можна коригувати */
+  transform: translateY(-50%);
+  z-index: 2;
+  text-align: left;       /* Вирівнюємо текст і кнопку по лівому краю */
   color: #ffffff;
-  padding-top: 100px;
+  max-width: 40%;         /* Обмежуємо ширину контенту (щоб не займав весь екран) */
 }
 
+/* Стилі для заголовка і підзаголовка залишаються ті самі або підкоригуйте за потреби */
 .hero__title {
   font-size: 2.8rem;
   font-weight: 300;
@@ -171,14 +174,11 @@ main {
   margin-bottom: 20px;
 }
 
-
-
-
 .hero__button {
   display: inline-block;
-  background-color: transparent;      /* прозорий фон */
-  color: #ffffff;                     /* білий текст */
-  border: 1px solid #ffffff;          /* тонка біла рамка */
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
   text-decoration: none;
   font-size: 1rem;
   font-weight: 500;
@@ -188,9 +188,10 @@ main {
 }
 
 .hero__button:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* напівпрозорий білосніжний фон при ховері */
-  color: #ffffff;                             /* текст лишається білим */
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
+
 
 
 /* ==================== Categories (горизонтальне меню) ==================== */
@@ -360,68 +361,63 @@ main {
 
 /* ==================== Footer (розміщення і стилі) ==================== */
 .footer {
-  background-color: #000000; /* чорний фон */
-  color: #ffffff;            /* білий текст */
+  background-color: #000;
+  color: #fff;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 0.95rem;
   line-height: 1.5;
 }
 
-
-
-
-/* === Блок «Наверх» === */
+/* Блок «Наверх» */
 .footer__back-to-top {
   text-align: center;
-  padding: 12px 0 0 0;
+  padding: 8px 0; /* менш товстий відступ зверху */
 }
+
 .footer__back-to-top a {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s ease;
 }
+
 .footer__back-to-top a:hover {
   color: #bfbfbf;
 }
 
-/* === Верхня частина футера: три колонки === */
-.footer__columns {
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 20px auto 0 auto;
-  padding: 0 20px;
-  gap: 40px; /* відстань між колонками */
+/* Центрований інформаційний блок «Про нас» (скорочений) */
+.footer__centered-info {
+  max-width: 800px;
+  margin: 24px auto;         /* зменшили вертикальні відступи */
+  text-align: center;
+  padding: 0 16px;
 }
 
-.footer__column {
-  flex: 1 1 200px; /* адаптивна ширина, мінімум 200px */
-}
-
-.footer__title {
-  font-size: 1rem;
+.footer__title-centered {
+  font-size: 1.4rem;          /* трохи зменшили шрифт */
   font-weight: 600;
-  margin-bottom: 12px;
-  color: #ffffff;
+  margin-bottom: 8px;         /* менший відступ під заголовком */
+  color: #fff;
 }
 
-.footer__link {
-  display: block;
-  color: #cccccc;
-  text-decoration: none;
-  margin-bottom: 8px;
-  transition: color 0.2s ease;
-}
-.footer__link:hover {
-  color: #ffffff;
+.footer__info-centered {
+  font-size: 0.95rem;
+  line-height: 1.6;           /* трохи менший міжрядковий інтервал */
+  color: #ccc;
+  margin-bottom: 12px;        /* зменшили відступ між абзацами */
 }
 
-/* === Нижня частина футера: рядок з юридичними посиланнями + контакти === */
+.footer__info-thanks {
+  font-style: italic;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+/* Нижня частина футера: посилання «Авто в наявності» + контакти */
 .footer__bottom {
-  border-top: 1px solid #333333;
-  margin-top: 24px;
-  padding: 16px 20px;
+  border-top: 1px solid #333;
+  margin-top: 16px;           /* менший верхній відступ */
+  padding: 12px 20px;         /* менший падінг зверху/знизу */
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
@@ -434,30 +430,43 @@ main {
 .footer__bottom-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
 }
 
 .footer__bottom-link {
-  color: #999999;
+  color: #999;
   text-decoration: none;
   font-size: 0.85rem;
+  margin-right: 16px;         /* відступ між посиланнями (якщо додаси кілька) */
   transition: color 0.2s ease;
 }
 .footer__bottom-link:hover {
-  color: #ffffff;
+  color: #fff;
 }
 
 /* Контакти */
 .footer__contact {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 8px; /* трохи відступу на вузьких екранах */
+  gap: 16px;                  /* менший проміжок між піктограмами */
+  margin-top: 4px;            /* невеликий відступ зверху */
 }
+
 .footer__contact-item {
-  color: #cccccc;
+  color: #ccc;
   font-size: 0.85rem;
 }
+
+/* «Липкий» футер (за потреби) */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.footer {
+  margin-top: auto;
+}
+
 
 /* ==================== Адаптивність === */
 @media (max-width: 800px) {
@@ -470,18 +479,7 @@ main {
   }
 }
 
-@media (max-width: 500px) {
-  .footer__bottom {
-    flex-direction: column;
-    gap: 12px;
-  }
-  .footer__bottom-links {
-    justify-content: center;
-  }
-  .footer__contact {
-    justify-content: center;
-  }
-}
+
 html {
   scroll-behavior: smooth;
 }

@@ -103,4 +103,20 @@
       padding: 20px;
     }
   }
+  .login-back-home {
+    margin-top: 16px;
+    text-align: center;
+  }
+  
+  .login-back-home a {
+    color: #005eaa;
+    text-decoration: none;
+    font-size: 0.90rem;
+    transition: color 0.2s ease;
+  }
+  
+  .login-back-home a:hover {
+    color: #003f75;
+    text-decoration: underline;
+  }
   

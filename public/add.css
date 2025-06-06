@@ -114,3 +114,110 @@
     gap: 0;
   }
 }
+/* ==================== Footer (розміщення і стилі) ==================== */
+.footer {
+  background-color: #000;
+  color: #fff;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Блок «Наверх» */
+.footer__back-to-top {
+  text-align: center;
+  padding: 8px 0; /* менш товстий відступ зверху */
+}
+
+.footer__back-to-top a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.footer__back-to-top a:hover {
+  color: #bfbfbf;
+}
+
+/* Центрований інформаційний блок «Про нас» (скорочений) */
+.footer__centered-info {
+  max-width: 800px;
+  margin: 24px auto;         /* зменшили вертикальні відступи */
+  text-align: center;
+  padding: 0 16px;
+}
+
+.footer__title-centered {
+  font-size: 1.4rem;          /* трохи зменшили шрифт */
+  font-weight: 600;
+  margin-bottom: 8px;         /* менший відступ під заголовком */
+  color: #fff;
+}
+
+.footer__info-centered {
+  font-size: 0.95rem;
+  line-height: 1.6;           /* трохи менший міжрядковий інтервал */
+  color: #ccc;
+  margin-bottom: 12px;        /* зменшили відступ між абзацами */
+}
+
+.footer__info-thanks {
+  font-style: italic;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+/* Нижня частина футера: посилання «Авто в наявності» + контакти */
+.footer__bottom {
+  border-top: 1px solid #333;
+  margin-top: 16px;           /* менший верхній відступ */
+  padding: 12px 20px;         /* менший падінг зверху/знизу */
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer__bottom-links {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.footer__bottom-link {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.85rem;
+  margin-right: 16px;         /* відступ між посиланнями (якщо додаси кілька) */
+  transition: color 0.2s ease;
+}
+.footer__bottom-link:hover {
+  color: #fff;
+}
+
+/* Контакти */
+.footer__contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;                  /* менший проміжок між піктограмами */
+  margin-top: 4px;            /* невеликий відступ зверху */
+}
+
+.footer__contact-item {
+  color: #ccc;
+  font-size: 0.85rem;
+}
+
+/* «Липкий» футер (за потреби) */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.footer {
+  margin-top: auto;
+}

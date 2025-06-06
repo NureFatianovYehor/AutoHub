@@ -185,23 +185,23 @@ main {
   padding: 40px 0;
 }
 
-/* ==================== FOOTER ==================== */
+/* ==================== Footer (розміщення і стилі) ==================== */
 .footer {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #000;
+  color: #fff;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 0.95rem;
   line-height: 1.5;
-  width: 100%;
 }
 
+/* Блок «Наверх» */
 .footer__back-to-top {
   text-align: center;
-  padding: 12px 0 0 0;
+  padding: 8px 0; /* менш товстий відступ зверху */
 }
 
 .footer__back-to-top a {
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s ease;
@@ -211,42 +211,39 @@ main {
   color: #bfbfbf;
 }
 
-.footer__columns {
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 20px auto 0 auto;
-  padding: 0 20px;
-  gap: 40px;
+/* Центрований інформаційний блок «Про нас» (скорочений) */
+.footer__centered-info {
+  max-width: 800px;
+  margin: 24px auto;         /* зменшили вертикальні відступи */
+  text-align: center;
+  padding: 0 16px;
 }
 
-.footer__column {
-  flex: 1 1 200px;
-}
-
-.footer__title {
-  font-size: 1rem;
+.footer__title-centered {
+  font-size: 1.4rem;          /* трохи зменшили шрифт */
   font-weight: 600;
-  margin-bottom: 12px;
-  color: #ffffff;
+  margin-bottom: 8px;         /* менший відступ під заголовком */
+  color: #fff;
 }
 
-.footer__link {
-  display: block;
-  color: #cccccc;
-  text-decoration: none;
-  margin-bottom: 8px;
-  transition: color 0.2s ease;
+.footer__info-centered {
+  font-size: 0.95rem;
+  line-height: 1.6;           /* трохи менший міжрядковий інтервал */
+  color: #ccc;
+  margin-bottom: 12px;        /* зменшили відступ між абзацами */
 }
 
-.footer__link:hover {
-  color: #ffffff;
+.footer__info-thanks {
+  font-style: italic;
+  color: #aaa;
+  margin-top: 4px;
 }
 
+/* Нижня частина футера: посилання «Авто в наявності» + контакти */
 .footer__bottom {
-  border-top: 1px solid #333333;
-  margin-top: 24px;
-  padding: 16px 20px;
+  border-top: 1px solid #333;
+  margin-top: 16px;           /* менший верхній відступ */
+  padding: 12px 20px;         /* менший падінг зверху/знизу */
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
@@ -259,53 +256,41 @@ main {
 .footer__bottom-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
 }
 
 .footer__bottom-link {
-  color: #999999;
+  color: #999;
   text-decoration: none;
   font-size: 0.85rem;
+  margin-right: 16px;         /* відступ між посиланнями (якщо додаси кілька) */
   transition: color 0.2s ease;
 }
-
 .footer__bottom-link:hover {
-  color: #ffffff;
+  color: #fff;
 }
 
+/* Контакти */
 .footer__contact {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 8px;
+  gap: 16px;                  /* менший проміжок між піктограмами */
+  margin-top: 4px;            /* невеликий відступ зверху */
 }
 
 .footer__contact-item {
-  color: #cccccc;
+  color: #ccc;
   font-size: 0.85rem;
 }
 
-@media (max-width: 800px) {
-  .footer__columns {
-    flex-direction: column;
-    gap: 20px;
-  }
-  .footer__column {
-    flex: 1 1 100%;
-  }
+/* «Липкий» футер (за потреби) */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-@media (max-width: 500px) {
-  .footer__bottom {
-    flex-direction: column;
-    gap: 12px;
-  }
-  .footer__bottom-links {
-    justify-content: center;
-  }
-  .footer__contact {
-    justify-content: center;
-  }
+.footer {
+  margin-top: auto;
 }
 
 @media (max-width: 600px) {

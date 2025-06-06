@@ -1,6 +1,6 @@
 <!-- public/login.html -->
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ук">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,14 +22,21 @@
     </form>
 
     <div class="login-message" id="login-message"></div>
+
+    <!-- Посилання для переходу на сторінку реєстрації -->
     <div class="login-link">
       Немає акаунту? <a href="signup.html">Зареєструватися</a>
+    </div>
+
+    <!-- Додаємо новий блок з посиланням на головну сторінку -->
+    <div class="login-back-home">
+      <a href="index.html">← Повернутися на головну</a>
     </div>
   </div>
 
   <!-- 1) Спочатку підключаємо ваш config.js, де визначено AUTOHUB_CONFIG -->
   <script src="config.js"></script>
-  <!-- 2) Потім підвантажуємо саме той самий UMD-бандл supabase-js, що й у реєстрації -->
+  <!-- 2) Потім підвантажуємо той самий UMD-бандл supabase-js, що й у реєстрації -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
   <!-- 3) І лише тепер підключаємо наш власний inline-скрипт, який використовує window.supabase -->
   <script>

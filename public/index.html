@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div id="top"></div>
 <!-- ==================== HEADER ==================== -->
 <header class="header">
   <div class="header__container">
@@ -26,7 +27,7 @@
 <!-- ==================== /HEADER ==================== -->
 
   <!-- ================= СЕКЦІЯ З ВІДЕО (HERO) ================= -->
-  <section class="hero" id="top">
+  <section class="hero">
     <video class="hero__video" autoplay muted loop playsinline>
       <source 
         src="https://oyvfmxypflflandvrvle.supabase.co/storage/v1/object/public/cars/video.mp4" 
@@ -74,54 +75,37 @@
     </div>
   </main>
 
-  <!-- ==================== FOOTER ==================== -->
-  <footer class="footer" id="contacts">
-    <!-- Блок «Наверх» -->
-    <div class="footer__back-to-top">
-      <a href="#top">Наверх ↑</a>
+  
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer" id="contacts">
+  <!-- Блок «Наверх» -->
+  <div class="footer__back-to-top">
+    <a href="#top">Наверх ↑</a>
+  </div>
+
+  <!-- Центрований блок із інформацією «Про нас» (скорочений) -->
+  <div class="footer__centered-info">
+    <h3 class="footer__title-centered">Про нас</h3>
+    <p class="footer__info-centered">
+      AutoHub — онлайн-автосалон, який об’єднує перевірені пропозиції нових авто з усієї Країни. 
+      Ми пропонуємо нові автомобілі, пригнані зі США та інших країн, а також топові моделі від перевірених виробників.
+    </p>
+    
+  </div>
+
+  <!-- Нижня частина футера: посилання «Авто в наявності» + контакти -->
+  <div class="footer__bottom">
+    <div class="footer__bottom-links">
+      <a href="catalog.html" class="footer__bottom-link">Авто в наявності</a>
     </div>
-
-    <!-- Верхня частина футера: три колонки -->
-    <div class="footer__columns">
-      <!-- Колонка 1: Покупка -->
-      <div class="footer__column">
-        <h3 class="footer__title">Покупка</h3>
-        <a href="/cars" class="footer__link">Авто в наявності</a>
-        <a href="/configurator" class="footer__link">Конфігуратор</a>
-        <a href="/accessories" class="footer__link">Аксесуари</a>
-      </div>
-
-      <!-- Колонка 2: Сервіс -->
-      <div class="footer__column">
-        <h3 class="footer__title">Сервіс</h3>
-        <a href="/service" class="footer__link">Техобслуговування</a>
-        <a href="/warranty" class="footer__link">Гарантія</a>
-        <a href="/spare-parts" class="footer__link">Запчастини</a>
-      </div>
-
-      <!-- Колонка 3: Компанія -->
-      <div class="footer__column">
-        <h3 class="footer__title">Компанія</h3>
-        <a href="/about" class="footer__link">Про нас</a>
-        <a href="#contacts" class="footer__link">Контакти</a>
-        <a href="/careers" class="footer__link">Вакансії</a>
-      </div>
+    <div class="footer__contact">
+      <span class="footer__contact-item">📧 autohub74@gmail.com</span>
+      <span class="footer__contact-item">📞 +38 095 860 15 88</span>
     </div>
+  </div>
+</footer>
+<!-- ==================== /FOOTER ==================== -->
 
-    <!-- Нижня частина футера: юридичні посилання + контакти -->
-    <div class="footer__bottom">
-      <div class="footer__bottom-links">
-        <a href="/privacy-policy" class="footer__bottom-link">Політика конфіденційності</a>
-        <a href="/terms" class="footer__bottom-link">Умови використання</a>
-        <a href="/feedback" class="footer__bottom-link">Зворотній зв'язок</a>
-      </div>
-      <div class="footer__contact">
-        <span class="footer__contact-item">📧 autohub74@gmail.com</span>
-        <span class="footer__contact-item">📞 +38 095 860 15 88</span>
-      </div>
-    </div>
-  </footer>
-  <!-- ==================== /FOOTER ==================== -->
 
   <!-- ==================== ПІДКЛЮЧЕННЯ JS ==================== -->
   <!-- 1) Спочатку config.js -->
