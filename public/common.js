@@ -76,9 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
           console.error('Помилка при виході:', error.message);
           return;
         }
-        // Після успішного виходу знову оновлюємо header
-        showUserNameOrAuthButtons();
+        // Перезавантажуємо сторінку після виходу
+        location.reload();
       });
+      
   
       container.appendChild(logoutBtn);
     }

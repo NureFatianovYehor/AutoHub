@@ -132,21 +132,34 @@ async function renderCars(cars) {
     return;
   }
 
-  // 5.1) Якщо є залогінений користувач, отримуємо його favorites (id машин)
+  // Отримуємо улюблені авто користувача
   const userFavs = await fetchUserFavoritesMap();
 
+  // Перевіряємо, чи поточний користувач — адмін
+  let isAdmin = false;
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (user) {
+      const { data: profile } = await supabaseClient
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+      isAdmin = profile?.role === 'admin';
+    }
+  } catch (e) {
+    console.warn('Не вдалося отримати роль користувача:', e);
+  }
+
   cars.forEach(car => {
-    // 5.2) Створюємо контейнер-картку
     const card = document.createElement('div');
     card.className = 'car-card';
 
-    // 5.3) Додаємо зображення авто
     const img = document.createElement('img');
     img.src = getImageSrc(car.images);
     img.alt = `${car.brand} ${car.model}`;
     card.appendChild(img);
 
-    // 5.4) Створюємо блок з контентом (тут без ціни)
     const content = document.createElement('div');
     content.className = 'car-card__content';
     content.innerHTML = `
@@ -156,14 +169,10 @@ async function renderCars(cars) {
       <div class="car-card__title">${car.title || ''}</div>
     `;
 
-    // 5.5) Створюємо іконку «сердечко» всередині content
     const heart = document.createElement('div');
     heart.className = 'favorite-icon';
-    if (userFavs.has(car.id)) {
-      heart.classList.add('active');
-    }
+    if (userFavs.has(car.id)) heart.classList.add('active');
     heart.addEventListener('click', async () => {
-      // 5.6) При кліку: перевіряємо, чи користувач залогінений
       const { data: { user }, error: userErr } = await supabaseClient.auth.getUser();
       if (userErr || !user) {
         showAuthAlert('Щоб додати в Улюблене, будь ласка, увійдіть або зареєструйтеся.');
@@ -172,45 +181,31 @@ async function renderCars(cars) {
       const userId = user.id;
       const carId = car.id;
 
-      // 5.7) Якщо зараз active → видаляємо з favorites, інакше додаємо
       if (heart.classList.contains('active')) {
-        // Видаляємо з улюблених
         const { error: delErr } = await supabaseClient
           .from('favorites')
           .delete()
           .eq('user_id', userId)
           .eq('car_id', carId);
-        if (delErr) {
-          console.error('Помилка видалення з favorites:', delErr.message);
-          return;
-        }
-        heart.classList.remove('active');
+        if (!delErr) heart.classList.remove('active');
       } else {
-        // Додаємо в улюблені
         const { error: insErr } = await supabaseClient
           .from('favorites')
           .insert({ user_id: userId, car_id: carId });
-        if (insErr) {
-          console.error('Помилка додавання до favorites:', insErr.message);
-          return;
-        }
-        heart.classList.add('active');
+        if (!insErr) heart.classList.add('active');
       }
     });
 
     content.appendChild(heart);
 
-    // 5.8) Блок із ціною та кнопкою «Детальніше», вирівняний у рядок
     const footer = document.createElement('div');
     footer.className = 'car-card__footer';
 
-    // 5.8.1) Ціна (ліворуч)
     const price = document.createElement('div');
     price.className = 'car-card__price';
     price.textContent = `$${Number(car.price || 0).toLocaleString()}`;
     footer.appendChild(price);
 
-    // 5.8.2) Кнопка «Детальніше» (праворуч)
     const link = document.createElement('a');
     link.className = 'car-card__button';
     link.textContent = 'Детальніше';
@@ -218,10 +213,73 @@ async function renderCars(cars) {
     footer.appendChild(link);
 
     content.appendChild(footer);
+
+    if (isAdmin) {
+      const adminControls = document.createElement('div');
+      adminControls.className = 'admin-controls';
+
+      const editBtn = document.createElement('button');
+      editBtn.textContent = 'Редагувати';
+      editBtn.className = 'edit-btn';
+      editBtn.onclick = () => {
+        window.location.href = `edit.html?id=${car.id}`;
+      };
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Видалити';
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.onclick = async () => {
+        if (!confirm('Ви впевнені, що хочете видалити це авто та його зображення?')) return;
+
+        let fileName = null;
+        if (typeof car.images === 'string') {
+          try {
+            const parts = car.images.split('/');
+            fileName = parts[parts.length - 1];
+          } catch (e) {
+            console.warn('❗️ Помилка розбору URL зображення:', e);
+          }
+        }
+
+        if (!fileName) {
+          alert('❌ Неможливо витягти імʼя файлу з посилання.');
+          return;
+        }
+
+        const { error: delError } = await supabaseClient
+          .storage
+          .from('cars')
+          .remove([fileName]);
+
+        if (delError) {
+          alert('❌ Помилка при видаленні зображення: ' + delError.message);
+          return;
+        }
+
+        const { error: carDeleteError } = await supabaseClient
+          .from('cars')
+          .delete()
+          .eq('id', car.id);
+
+        if (carDeleteError) {
+          alert('❌ Помилка при видаленні машини з бази: ' + carDeleteError.message);
+        } else {
+          alert('✅ Автомобіль і його зображення успішно видалено');
+          await fetchCars();
+          await renderCars(allCars);
+        }
+      };
+
+      adminControls.appendChild(editBtn);
+      adminControls.appendChild(deleteBtn);
+      content.appendChild(adminControls);
+    }
+
     card.appendChild(content);
     container.appendChild(card);
   });
 }
+
 
 
 // ---------------------------------------------
