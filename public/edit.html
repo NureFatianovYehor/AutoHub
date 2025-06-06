@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Редагувати авто</title>
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <script src="/config.js"></script>
+  <script defer src="edit.js"></script>
+  <link rel="stylesheet" href="edit.css" />
+</head>
+<body>
+  <h1>Редагування авто</h1>
+  <form id="edit-form">
+    <input type="hidden" id="car-id" />
+
+    <label>Назва:</label>
+    <input type="text" id="title" required />
+
+    <label>Опис:</label>
+    <textarea id="description"></textarea>
+
+    <label>Бренд:</label>
+    <input type="text" id="brand" required />
+
+    <label>Модель:</label>
+    <input type="text" id="model" required />
+
+    <label>Рік:</label>
+    <input type="number" id="year" />
+
+    <label>Ціна ($):</label>
+    <input type="number" id="price" />
+
+    <label>Пробіг (km):</label>
+    <input type="number" id="mileage" />
+
+    <label>Паливо:</label>
+    <input type="text" id="fuel_type" />
+
+    <label>КПП:</label>
+    <input type="text" id="transmission" />
+
+    <label>Тип кузова:</label>
+    <input type="text" id="body_type" />
+
+    <label>Привід:</label>
+    <input type="text" id="drive_type" />
+
+    <label>Прискорення (0-100):</label>
+    <input type="number" step="0.1" id="acceleration" />
+
+    <label>Макс. швидкість:</label>
+    <input type="number" id="max_speed" />
+
+    <label>Колір:</label>
+    <input type="text" id="color" />
+
+    <label>Потужність:</label>
+    <input type="text" id="power" />
+
+    <label>Нове зображення (файл):</label>
+<input type="file" id="image-file" accept="image/*" />
+
+    <button type="submit">Зберегти зміни</button>
+  </form>
+</body>
+</html>
