@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (addCarLink) {
     addCarLink.style.display = 'none';
   }
-  (async () => {
+  ;(async () => {
     try {
       const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
       if (userError || !user) {
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .from('profiles')
         .select('role')
         .eq('id', user.id)
-        .single();
+        .maybeSingle();       // замінили .single() на .maybeSingle()
       if (profileError || !profileData) {
         return;
       }

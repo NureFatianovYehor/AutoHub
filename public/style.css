@@ -483,3 +483,6 @@ body {
 html {
   scroll-behavior: smooth;
 }
+.categories__list {
+  justify-content: center;
+}
