@@ -9,30 +9,30 @@ document.addEventListener('DOMContentLoaded', () => {
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // ---------------------------------------------
-  // БЛОК: приховати/показати посилання «Додати авто» для адміна
-  const addCarLink = document.getElementById('add-car-link');
-  if (addCarLink) {
-    addCarLink.style.display = 'none';
-  }
+  // БЛОК: приховати/показати посилання «Додати авто» та «Історія замовлень» для адміна
+  const addCarLink  = document.getElementById('add-car-link');
+  const orderLink   = document.getElementById('order');
+  if (addCarLink)  addCarLink.style.display = 'none';
+  if (orderLink)   orderLink.style.display  = 'none';
+
   ;(async () => {
     try {
       const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-      if (userError || !user) {
-        return;
-      }
+      if (userError || !user) return;
+
       const { data: profileData, error: profileError } = await supabaseClient
         .from('profiles')
         .select('role')
         .eq('id', user.id)
-        .maybeSingle();       // замінили .single() на .maybeSingle()
-      if (profileError || !profileData) {
-        return;
-      }
-      if (profileData.role === 'admin' && addCarLink) {
-        addCarLink.style.display = 'inline-block';
+        .maybeSingle();
+      if (profileError || !profileData) return;
+
+      if (profileData.role === 'admin') {
+        if (addCarLink) addCarLink.style.display = 'inline-block';
+        if (orderLink)  orderLink.style.display  = 'inline-block';
       }
     } catch {
-      // у разі помилки нічого не робимо, посилання залишиться прихованим
+      // у разі помилки нічого не робимо
     }
   })();
   // ---------------------------------------------
@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3) Завантажуємо «Улюблені» авто
   async function loadFavorites() {
-    // Показуємо «Завантаження…»
     container.innerHTML = '<p class="loading">Завантаження...</p>';
 
     // 3.1) Отримуємо поточного користувача
@@ -76,46 +75,42 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // favData — масив об’єктів виду { car: { …дані про машину… } }
-    const cars = favData.map(row => row.car).filter(car => car !== null);
+    const cars = favData.map(row => row.car).filter(c => c);
 
     if (!cars.length) {
       container.innerHTML = '<p class="no-cars">У вас поки немає улюблених автомобілів.</p>';
       return;
     }
 
-    // 3.3) Очищуємо контейнер і рендеримо картки
+    // 3.3) Рендеримо картки
     container.innerHTML = '';
     cars.forEach(car => {
-      const card = createFavoriteCarCard(car);
-      container.appendChild(card);
+      container.appendChild(createFavoriteCarCard(car));
     });
   }
 
-  // 4) Функція створення картки «Улюбленого»
+  // 4) Створюємо картку «Улюбленого»
   function createFavoriteCarCard(car) {
     const card = document.createElement('div');
     card.className = 'car-card';
     card.style.position = 'relative';
 
-    // 4.1) Іконка «Сердечко»
+    // Сердечко
     const heart = document.createElement('span');
     heart.className = 'favorite-icon active';
     heart.dataset.carId = car.id;
     card.appendChild(heart);
 
-    // 4.2) Зображення
+    // Зображення
     const img = document.createElement('img');
     img.className = 'car-card__image';
     img.src = getImageSrc(car.images);
     img.alt = `${car.brand || ''} ${car.model || ''}`.trim() || 'Немає фото';
     card.appendChild(img);
 
-    // 4.3) Контент картки (brand, model, title, price, кнопка)
+    // Контент
     const content = document.createElement('div');
     content.className = 'car-card__content';
-
-    // Блок із текстовою інформацією
     const info = document.createElement('div');
     info.className = 'car-card__info';
 
@@ -131,16 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     content.appendChild(info);
 
-    // Footer: ціна + кнопка «Детальніше»
     const footer = document.createElement('div');
     footer.className = 'car-card__footer';
-
     const price = document.createElement('div');
     price.className = 'car-card__price';
     price.textContent = `$${Number(car.price || 0).toLocaleString()}`;
     footer.appendChild(price);
 
-    // Кнопка «Детальніше» як клікабельне посилання
     const button = document.createElement('a');
     button.className = 'car-card__button';
     button.textContent = 'Детальніше';
@@ -150,26 +142,15 @@ document.addEventListener('DOMContentLoaded', () => {
     content.appendChild(footer);
     card.appendChild(content);
 
-    // 4.4) Обробник кліку по «сердечку» → видалити з улюблених
+    // Видалення з улюблених
     heart.addEventListener('click', async () => {
       const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-      if (userError || !user) {
-        window.location.href = 'login.html';
-        return;
-      }
-      const carId = heart.dataset.carId;
-      const { error: delError } = await supabaseClient
+      if (userError || !user) return window.location.href = 'login.html';
+      await supabaseClient
         .from('favorites')
         .delete()
-        .match({ user_id: user.id, car_id: carId });
-
-      if (delError) {
-        console.error('Помилка видалення з улюблених:', delError.message);
-        return;
-      }
-      // Видаляємо картку з DOM
+        .match({ user_id: user.id, car_id: car.id });
       card.remove();
-      // Якщо вже немає жодної картки, показуємо повідомлення
       if (!container.querySelector('.car-card')) {
         container.innerHTML = '<p class="no-cars">У вас поки немає улюблених автомобілів.</p>';
       }
@@ -178,25 +159,20 @@ document.addEventListener('DOMContentLoaded', () => {
     return card;
   }
 
-  // 5) Допоміжна функція: отримуємо першу картинку з поля images
+  // 5) Допоміжна функція для отримання зображення
   function getImageSrc(images) {
     if (!images) return 'no-image.jpg';
-    if (Array.isArray(images)) {
-      return images[0];
-    }
+    if (Array.isArray(images)) return images[0];
     if (typeof images === 'string') {
-      const trimmed = images.replace(/{|}/g, '').trim();
       try {
-        const parsed = JSON.parse(trimmed);
+        const parsed = JSON.parse(images);
         if (Array.isArray(parsed) && parsed.length) return parsed[0];
       } catch { }
-      if (trimmed.startsWith('http') || trimmed.startsWith('data:image')) {
-        return trimmed.split(',')[0];
-      }
+      return images.split(',')[0].trim();
     }
     return 'no-image.jpg';
   }
 
-  // Запускаємо завантаження «Улюблених»
+  // Запускаємо
   loadFavorites();
 });
