@@ -2,41 +2,78 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <title>Історія замовлень | AutoHub</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Історія замовлень | AutoHub</title>
+  <!-- Загальні стилі сайту (header, footer, базові) -->
   <link rel="stylesheet" href="style.css" />
+  <!-- Стилі для таблиці замовлень -->
   <link rel="stylesheet" href="order.css" />
-  <script src="https://unpkg.com/@supabase/supabase-js"></script>
-  <script src="/config.js"></script>
-  <script defer src="order.js"></script>
 </head>
 <body class="page-container">
+  <!-- HEADER -->
   <header class="header">
     <div class="header__container">
       <a href="/" class="header__logo">AutoHub</a>
       <nav class="header__nav">
         <a href="/" class="header__link">Головна</a>
-        <a href="/add.html" class="header__link" id="add-car-link">Додати авто</a>
-        <a href="/order.html" class="header__link" id="order">Історія замовлень</a>
+        <a href="/add.html" class="header__link" id="add-car-link" style="display:none">Додати авто</a>
+        <a href="/order.html" class="header__link active" id="order-link">Історія замовлень</a>
+        <a href="/favorites.html" class="header__link">Улюблене</a>
+        <a href="/about.html" class="header__link">Про нас</a>
+        <a href="#contacts" class="header__link">Контакти</a>
       </nav>
+      <div class="header__user" id="user-name"></div>
     </div>
   </header>
 
-  <main class="main">
-    <div class="container">
-      <h1>Історія замовлень</h1>
-      <table id="orders-table">
-        <thead>
-          <tr>
-            <th>Користувач</th>
-            <th>Автомобіль</th>
-            <th>Повідомлення</th>
-            <th>Дата</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+  <!-- MAIN -->
+  <main class="catalog">
+    <div class="catalog__container">
+      <h1 class="catalog__title">Історія замовлень</h1>
+      <div class="orders-container">
+        <table id="orders-table">
+          <thead>
+            <tr>
+              <th>Користувач</th>
+              <th>Автомобіль</th>
+              <th>Повідомлення</th>
+              <th>Дата</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
   </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="contacts">
+    <div class="footer__back-to-top">
+      <a href="#top">Наверх ↑</a>
+    </div>
+    <div class="footer__centered-info">
+      <h3 class="footer__title-centered">Ввідна інформація</h3>
+      <p class="footer__info-centered">
+        AutoHub — онлайн-автосалон, який об’єднує перевірені пропозиції нових авто з усієї Країни. 
+        Ми пропонуємо нові автомобілі, пригнані зі США та інших країн, а також топові моделі від перевірених виробників.
+      </p>
+    </div>
+    <div class="footer__bottom">
+      <div class="footer__bottom-links">
+        <a href="catalog.html" class="footer__bottom-link">Авто в наявності</a>
+        <a href="about.html" class="footer__bottom-link">Повна інформація про нас</a>
+      </div>
+      <div class="footer__contact">
+        <span class="footer__contact-item">📧 autohub74@gmail.com</span>
+        <span class="footer__contact-item">📞 +38 095 860 15 88</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
+  <script src="order.js"></script>
 </body>
 </html>

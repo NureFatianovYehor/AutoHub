@@ -1,80 +1,71 @@
-main.main {
-    padding: 40px 20px;
-    max-width: 1000px;
-    margin: auto;
+.orders-container {
+  overflow-x: auto;
+}
+
+#orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+#orders-table thead {
+  background-color: #f7f7f7;
+}
+
+#orders-table th,
+#orders-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+#orders-table th {
+  font-weight: 600;
+  color: #1d1d1f;
+}
+
+#orders-table td {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+#orders-table tr:last-child td {
+  border-bottom: none;
+}
+
+.delete-order-btn {
+  background-color: #ff4d4f;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.delete-order-btn:hover {
+  background-color: #d9363e;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+  #orders-table, thead, tbody, th, td, tr {
+    display: block;
   }
-  
-  h1 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 30px;
-    color: #1d1d1f;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 0 12px rgba(0,0,0,0.05);
-  }
-  
-  thead {
-    background-color: #f4f4f4;
-  }
-  
-  th, td {
-    padding: 16px 20px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
   th {
-    font-weight: 600;
-    color: #333;
+    display: none;
   }
-  
   td {
-    color: #444;
-    font-size: 0.95rem;
+    position: relative;
+    padding: 10px 16px;
   }
-  
-  tr:last-child td {
-    border-bottom: none;
+  td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    position: absolute;
+    left: 16px;
+    top: 10px;
   }
-  
-  @media (max-width: 768px) {
-    table, thead, tbody, th, td, tr {
-      display: block;
-    }
-    th {
-      display: none;
-    }
-    td {
-      padding: 10px 15px;
-      position: relative;
-    }
-    td::before {
-      content: attr(data-label);
-      font-weight: bold;
-      position: absolute;
-      left: 10px;
-      top: 10px;
-      white-space: nowrap;
-    }
-  }
-  .delete-order-btn {
-    background-color: #ff4d4f;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    margin-top: 10px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .delete-order-btn:hover {
-    background-color: #d9363e;
-  }
-  
+}

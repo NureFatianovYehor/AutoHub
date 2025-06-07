@@ -19,7 +19,6 @@ body {
   flex-direction: column;
 }
 
-/* ==================== HEADER (шапка) ==================== */
 /* ==================== Header (шапка) ==================== */
 .header {
   position: sticky;
@@ -31,13 +30,14 @@ body {
 }
 
 .header__container {
-  position: relative;        /* щоб #user-name можна було центровано вивести */
   max-width: 1200px;
   margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 12px 20px;
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
 }
 
 .header__logo {
@@ -47,25 +47,21 @@ body {
   text-decoration: none;
 }
 
-/* Блок з іменем користувача (універсально центруватиметься) */
+/* Центруємо блок із користувачем */
 .header__user {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
-  gap: 8px;                /* відстань між ім’ям і кнопкою */
-  white-space: nowrap;     /* щоб текст не переносився */
+  gap: 8px;
   font-size: 1rem;
   font-weight: 500;
   color: #ffffff;
-  z-index: 10;
+  white-space: nowrap;
 }
 
-/* Навігація праворуч */
+/* Навігація праворуч (може залишатися при лівому/центровому блоці) */
 .header__nav {
   display: flex;
+  justify-content: center;
   gap: 24px;
 }
 
@@ -81,7 +77,7 @@ body {
   color: #bfbfbf; /* світло-сірий при наведенні */
 }
 
-/* Стилі для кнопок «Увійти», «Зареєструватися» та «Вийти» */
+/* Стиль для кнопок “Увійти” / “Зареєструватися” / “Вийти” */
 .header__user button,
 .header__user a {
   background: transparent;

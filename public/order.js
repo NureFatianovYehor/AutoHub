@@ -1,9 +1,54 @@
-// === order.js ===
+// order.js
 
-const SUPABASE_URL = window.AUTOHUB_CONFIG?.SUPABASE_URL;
+// 1) Ініціалізація Supabase
+const SUPABASE_URL      = window.AUTOHUB_CONFIG?.SUPABASE_URL;
 const SUPABASE_ANON_KEY = window.AUTOHUB_CONFIG?.SUPABASE_KEY;
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase          = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// 2) Показ/приховання header-елементів та UI авторизації
+async function initHeaderUI() {
+  const { data: { user } } = await supabase.auth.getUser();
+  const userEl   = document.getElementById('user-name');
+  const addCarEl = document.getElementById('add-car-link');
+  const orderEl  = document.getElementById('order-link');
+
+  if (user) {
+    // Отримуємо profile одним запитом: first_name, last_name, role
+    const { data: profile, error: profErr } = await supabase
+      .from('profiles')
+      .select('first_name, last_name, role')
+      .eq('id', user.id)
+      .single();
+
+    const displayName = (profile && profile.first_name && profile.last_name)
+      ? `${profile.first_name} ${profile.last_name}`
+      : user.email.split('@')[0];
+
+    // Вставляємо ім’я користувача + кнопку Вийти
+    userEl.innerHTML = `
+      <span>Привіт, ${displayName}</span>
+      <button id="logout-btn">Вийти</button>
+    `;
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.reload();
+    });
+
+    // Показуємо “Додати авто” та “Історія замовлень” для admin
+    if (!profErr && profile.role === 'admin') {
+      if (addCarEl) addCarEl.style.display = 'inline-block';
+      if (orderEl)  orderEl.style.display  = 'inline-block';
+    }
+  } else {
+    // Якщо не залогінений — показуємо кнопки увійти/реєстрація
+    userEl.innerHTML = `
+      <a href="login.html"    class="header__user-button">Увійти</a>
+      <a href="register.html" class="header__user-button">Реєстрація</a>
+    `;
+  }
+}
+
+// 3) Завантаження і рендер замовлень
 async function loadOrders() {
   const { data: messages, error } = await supabase
     .from('messages')
@@ -11,8 +56,6 @@ async function loadOrders() {
       id,
       message,
       created_at,
-      user_id,
-      car_id,
       profiles (email, first_name, last_name),
       cars (brand, model, year, price)
     `)
@@ -26,51 +69,59 @@ async function loadOrders() {
   const tbody = document.querySelector('#orders-table tbody');
   tbody.innerHTML = '';
 
-  messages.forEach(row => {
+  messages.forEach(msg => {
     const tr = document.createElement('tr');
 
-    const user = row.profiles
-      ? `${row.profiles.first_name || ''} ${row.profiles.last_name || ''} (${row.profiles.email})`
+    const userText = msg.profiles
+      ? `${msg.profiles.first_name} ${msg.profiles.last_name} (${msg.profiles.email})`
       : 'Невідомий користувач';
 
-    const car = row.cars
-      ? `${row.cars.brand} ${row.cars.model} (${row.cars.year}) - $${row.cars.price}`
+    const carText = msg.cars
+      ? `${msg.cars.brand} ${msg.cars.model} (${msg.cars.year}) – $${msg.cars.price}`
       : 'Невідоме авто';
 
-    const tdUser = document.createElement('td');
-    tdUser.textContent = user;
+    tr.innerHTML = `
+      <td>${userText}</td>
+      <td>${carText}</td>
+      <td>${msg.message || '-'}</td>
+      <td>${new Date(msg.created_at).toLocaleString()}</td>
+      <td><button class="delete-order-btn">Видалити</button></td>
+    `;
 
-    const tdCar = document.createElement('td');
-    tdCar.textContent = car;
-
-    const tdMsg = document.createElement('td');
-    tdMsg.textContent = row.message || '-';
-
-    const tdDate = document.createElement('td');
-    tdDate.textContent = new Date(row.created_at).toLocaleString();
-
-    const tdDelete = document.createElement('td');
-    const btn = document.createElement('button');
-    btn.textContent = 'Видалити';
-    btn.className = 'delete-order-btn';
-    btn.addEventListener('click', async () => {
+    tr.querySelector('.delete-order-btn').addEventListener('click', async () => {
       if (confirm('Ви впевнені, що хочете видалити це замовлення?')) {
-        const { error: deleteError } = await supabase
+        const { error: delErr } = await supabase
           .from('messages')
           .delete()
-          .eq('id', row.id);
-        if (deleteError) {
-          alert('Помилка при видаленні замовлення');
-        } else {
-          tr.remove();
-        }
+          .eq('id', msg.id);
+        if (delErr) alert('Не вдалося видалити замовлення');
+        else tr.remove();
       }
     });
-    tdDelete.appendChild(btn);
 
-    tr.append(tdUser, tdCar, tdMsg, tdDate, tdDelete);
     tbody.appendChild(tr);
   });
 }
 
-document.addEventListener('DOMContentLoaded', loadOrders);
+// 4) Старт: ініціалізуємо шапку, перевіряємо права та вантажимо дані
+document.addEventListener('DOMContentLoaded', async () => {
+  await initHeaderUI();
+
+  const { data: { user }, error: userErr } = await supabase.auth.getUser();
+  if (userErr || !user) {
+    alert('Увійдіть як адміністратор');
+    return window.location.href = '/login.html';
+  }
+
+  const { data: profile, error: roleErr } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+  if (roleErr || profile?.role !== 'admin') {
+    alert('Доступ лише для адміністраторів');
+    return window.location.href = '/';
+  }
+
+  loadOrders();
+});

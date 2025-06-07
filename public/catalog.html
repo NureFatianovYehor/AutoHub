@@ -11,25 +11,27 @@
 </head>
 <body class="page-container">
   <div id="top"></div>
-  <!-- ==================== HEADER ==================== -->
-  <header class="header">
+   <!-- ==================== HEADER ==================== -->
+   <header class="header">
     <div class="header__container">
-      <!-- Логотип -->
-      <a href="/" class="header__logo">AutoHub</a>
-
-      <!-- Блок для імені користувача (увійти/зареєструватися або Привіт, Ім'я + Вийти) -->
-      <div id="user-name" class="header__user"></div>
-
-      <!-- Навігаційні посилання -->
+      <!-- Логотип зліва -->
+      <a href="/" class="header__logo" id="logo-text">AutoHub</a>
+  
+      <!-- Центрована навігація -->
       <nav class="header__nav">
         <a href="/" class="header__link">Головна</a>
         <a href="/add.html" class="header__link" id="add-car-link">Додати авто</a>
+        <a href="/order.html" class="header__link" id="order">Історія замовлень</a>
         <a href="/favorites.html" class="header__link">Улюблене</a>
         <a href="/about.html" class="header__link">Про нас</a>
         <a href="#contacts" class="header__link">Контакти</a>
       </nav>
+  
+      <!-- Привітання справа -->
+      <div class="header__user" id="user-name"></div>
     </div>
   </header>
+  
   <!-- ==================== /HEADER ==================== -->
   <div id="auth-alert" class="auth-alert">
     <!-- Сюди JS вставить потрібний текст -->
