@@ -14,26 +14,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // ================= 2) Сховаємо «Додати авто» для не-адмінів =================
-  const addCarLink = document.getElementById('add-car-link');
-  if (addCarLink) addCarLink.style.display = 'none';
-  (async () => {
-    try {
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (!user || userError) return;
+  // ================= 2) Сховаємо «Додати авто» і «Історія замовлень» для не-адмінів =================
+const addCarLink  = document.getElementById('add-car-link');
+const orderLink   = document.getElementById('order');
+if (addCarLink) addCarLink.style.display = 'none';
+if (orderLink)  orderLink.style.display  = 'none';
 
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
+;(async () => {
+  try {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (!user || userError) return;
 
-      if (profileData?.role === 'admin' && addCarLink) {
-        addCarLink.style.display = 'inline-block';
-      }
-    } catch {
-      // У разі помилки просто нічого не робимо
+    const { data: profileData, error: profileError } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+    if (profileError || !profileData) return;
+
+    if (profileData.role === 'admin') {
+      if (addCarLink) addCarLink.style.display = 'inline-block';
+      if (orderLink)  orderLink.style.display  = 'inline-block';
     }
-  })();
+  } catch {
+    // у разі помилки нічого не робимо
+  }
+})();
+
 
   // ================= 3) Обробка ID авто з URL =================
   const params = new URLSearchParams(window.location.search);
