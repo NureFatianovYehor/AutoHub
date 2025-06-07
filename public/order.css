@@ -1,0 +1,80 @@
+main.main {
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: auto;
+  }
+  
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #1d1d1f;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 12px rgba(0,0,0,0.05);
+  }
+  
+  thead {
+    background-color: #f4f4f4;
+  }
+  
+  th, td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  td {
+    color: #444;
+    font-size: 0.95rem;
+  }
+  
+  tr:last-child td {
+    border-bottom: none;
+  }
+  
+  @media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+    th {
+      display: none;
+    }
+    td {
+      padding: 10px 15px;
+      position: relative;
+    }
+    td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      white-space: nowrap;
+    }
+  }
+  .delete-order-btn {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .delete-order-btn:hover {
+    background-color: #d9363e;
+  }
+  

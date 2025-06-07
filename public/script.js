@@ -51,41 +51,37 @@ document.addEventListener('DOMContentLoaded', () => {
   // БЛОК: скрыть/показать ссылку "Додати авто" для админов
   // ---------------------------------------------
   const addCarLink = document.getElementById('add-car-link');
-  if (addCarLink) {
-    addCarLink.style.display = 'none';
-  }
+if (addCarLink) {
+  addCarLink.style.display = 'none';
+}
 
-  (async () => {
-    try {
-      const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-      if (userError || !user) {
-        // Юзер не залогинен или ошибка — ссылка остаётся скрытой
-        return;
-      }
+const orderLink = document.getElementById('order');
+if (orderLink) {
+  orderLink.style.display = 'none';
+}
 
-      // Получаем роль пользователя из таблицы profiles
-      const { data: profileData, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
+(async () => {
+  try {
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    if (userError || !user) return;
 
-      if (profileError || !profileData) {
-        // Ошибка или профиль не найден — ссылка остаётся скрытой
-        console.error('Не вдалося отримати профіль користувача:', profileError?.message);
-        return;
-      }
+    const { data: profileData, error: profileError } = await supabaseClient
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
 
-      // Если роль "admin", показываем ссылку
-      if (profileData.role === 'admin' && addCarLink) {
-        addCarLink.style.display = 'inline-block';
-      }
-      // Иначе — остаётся скрытой
-    } catch (err) {
-      console.error('Помилка при визначенні ролі:', err.message);
-      // При ошибке оставляем ссылку скрытой
+    if (profileError || !profileData) return;
+
+    if (profileData.role === 'admin') {
+      if (addCarLink)  addCarLink.style.display = 'inline-block';
+      if (orderLink)   orderLink.style.display = 'inline-block';
     }
-  })();
+  } catch (err) {
+    console.error('Помилка при визначенні ролі:', err.message);
+  }
+})();
+
   // ---------------------------------------------
   // Конец блока скрыть/показать ссылку "Додати авто"
   // ---------------------------------------------
