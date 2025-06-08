@@ -84,7 +84,8 @@ async function loadOrders() {
       <td>${userText}</td>
       <td>${carText}</td>
       <td>${msg.message || '-'}</td>
-      <td>${new Date(msg.created_at).toLocaleString()}</td>
+      <td>${new Date(new Date(msg.created_at).getTime() + 3 * 60 * 60 * 1000).toLocaleString()}</td>
+
       <td><button class="delete-order-btn">Видалити</button></td>
     `;
 

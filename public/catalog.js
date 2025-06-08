@@ -119,6 +119,10 @@ async function fetchUserFavoritesMap() {
   // 4.3) Створюємо Set з усіх car_id
   return new Set(data.map(row => row.car_id));
 }
+function truncateDescription(text, maxLength) {
+  if (!text) return '';
+  return text.length > maxLength ? text.slice(0, maxLength).trim() + '…' : text;
+}
 
 // ---------------------------------------------
 // 5) Рендеримо список карток (з урахуванням активних «сердечок»)
@@ -166,7 +170,10 @@ async function renderCars(cars) {
       <div class="car-card__brand-model">
         <strong>${car.brand} ${car.model}</strong> (${car.year})
       </div>
-      <div class="car-card__title">${car.title || ''}</div>
+      <div class="car-card__title">
+  ${car.description ? truncateDescription(car.description, 80) : ''}
+</div>
+
     `;
 
     const heart = document.createElement('div');
