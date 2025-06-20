@@ -157,7 +157,7 @@ async function renderCars(cars) {
 
   cars.forEach(car => {
     const card = document.createElement('div');
-    card.className = 'car-card';
+    card.className = 'car-card bg-white rounded shadow h-full flex flex-col';
 
     const img = document.createElement('img');
     img.src = getImageSrc(car.images);

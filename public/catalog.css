@@ -102,7 +102,7 @@ body {
 .layout {
   display: flex;
   align-items: flex-start;    /* sidebar и карточки выравнены по самому верху содержимого */
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 0 40px 20px;       /* отступ: сверху 0, справа 0, снизу 40px, слева 20px */
   gap: 32px;                   /* расстояние между sidebar и карточками */
   flex: 1;
@@ -203,11 +203,12 @@ body {
 
 /* ==================== СЕТКА КАРТОЧЕК ==================== */
 /* Увеличили ширину карточки на 20%: min-width = 312px (если было 260px) */
-.cars-container {
+#cars-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(312px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 32px;
 }
+
 
 /* ==================== ОДНА КАРТОЧКА ==================== */
 
